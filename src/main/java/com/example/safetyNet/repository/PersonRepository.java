@@ -1,23 +1,23 @@
 package com.example.safetyNet.repository;
 
 import com.example.safetyNet.model.Person;
-import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+
+import static com.example.safetyNet.service.LoadDataFromJson.readJsonFile;
 
 @Repository
 public class PersonRepository  {
 
-private List<Person> personList = new ArrayList<>();
 
-    public List<Person> getPersonList() {
-        return personList;
+    public List<Person> getPersonList() throws IOException {
+
+        return readJsonFile("persons", Person.class);
     }
 
-    public void setPersonList(List<Person> personList) {
-        this.personList = personList;
-    }
+
+
 }

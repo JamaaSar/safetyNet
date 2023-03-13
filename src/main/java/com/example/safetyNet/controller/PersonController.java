@@ -1,27 +1,31 @@
 package com.example.safetyNet.controller;
 
 import com.example.safetyNet.model.Person;
-import org.springframework.stereotype.Controller;
+import com.example.safetyNet.service.PersonService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.io.IOException;
+import java.util.List;
 
 @RestController
 @RequestMapping("/person")
 public class PersonController {
 
-    @PostMapping
-    public Person createPerson(@RequestBody Person person){
+    @Autowired
+    PersonService personService;
 
-        return null;
+    @GetMapping
+    public ResponseEntity<?> getAllPerson() throws IOException {
+        List<Person> personList = personService.getAllPerson();
+        if (!personList.isEmpty()) {
+            return new ResponseEntity<>(personList, HttpStatus.OK);
+        } else {
 
+            return new ResponseEntity<>(personList, HttpStatus.NOT_FOUND);
+        }
     }
-    @PutMapping
-    public Person updatePerson(){
-        return null;
 
-
-    }
-    @DeleteMapping
-    public void deletePerson(){
-
-    }
 }
