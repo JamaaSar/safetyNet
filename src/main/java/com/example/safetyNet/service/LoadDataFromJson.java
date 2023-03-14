@@ -1,19 +1,12 @@
 package com.example.safetyNet.service;
 
-
-import com.example.safetyNet.model.Person;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.SerializationFeature;
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.springframework.stereotype.Service;
-
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 
 @Service
@@ -24,7 +17,6 @@ public class LoadDataFromJson {
         ObjectMapper mapper = new ObjectMapper();
         JsonNode jsonNode = mapper.readTree(jsonData).get(field);
         return mapper.readValue(jsonNode.traverse(), mapper.getTypeFactory().constructCollectionType(List.class, tClass));
-
     }
 
     public static <T> T readJsonFileFilter(String field,String key, String value,  Class<T>  tClass) throws IOException {
@@ -37,6 +29,8 @@ public class LoadDataFromJson {
         }
         return null;
     }
+
+
 
 
 }

@@ -1,6 +1,6 @@
 package com.example.safetyNet.controller;
 
-import com.example.safetyNet.dto.ChildAlertDto;
+import com.example.safetyNet.service.FireStationService;
 import com.example.safetyNet.service.PersonService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -19,6 +19,8 @@ import java.util.Map;
 public class UrlsController {
     @Autowired
     PersonService personService;
+    @Autowired
+    FireStationService fireStationService;
 
     @GetMapping("/communityEmail")
     public ResponseEntity<?> getEm(@RequestParam(name = "city", required = true) String city) throws IOException {
@@ -52,6 +54,53 @@ public class UrlsController {
             return new ResponseEntity<>(personList, HttpStatus.NOT_FOUND);
         }
 
+    }
+
+    @GetMapping("/firestation")
+    public  ResponseEntity<?> getFireStationByStationNumber(@RequestParam(name="stationNumber", required = true) String stationNumber) throws IOException {
+        List<Map<String, List<?>>> result = fireStationService.getFireStaionById(stationNumber);
+
+        if (!result.isEmpty()) {
+            return new ResponseEntity<>(result, HttpStatus.OK);
+        } else {
+
+            return new ResponseEntity<>(result, HttpStatus.NOT_FOUND);
+        }
+    }
+
+    @GetMapping("/phoneAlert")
+    public  ResponseEntity<?> getFireStation(@RequestParam(name="firestation", required = true) String firestation) throws IOException {
+        List<List<?>>result = fireStationService.getFireStaion(firestation);
+
+        if (!result.isEmpty()) {
+            return new ResponseEntity<>(result, HttpStatus.OK);
+        } else {
+
+            return new ResponseEntity<>(result, HttpStatus.NOT_FOUND);
+        }
+    }
+
+    @GetMapping("/fire")
+    public  ResponseEntity<?> getFire(@RequestParam(name="address", required = true) String address) throws IOException {
+        List<List<?>>result = fireStationService.getFire(address);
+
+        if (!result.isEmpty()) {
+            return new ResponseEntity<>(result, HttpStatus.OK);
+        } else {
+
+            return new ResponseEntity<>(result, HttpStatus.NOT_FOUND);
+        }
+    }
+    @GetMapping("/flood")
+    public  ResponseEntity<?> getFlood(@RequestParam(name="stations", required = true) List<String> stations) throws IOException {
+        List<List<?>>result = fireStationService.getFlood(stations);
+
+        if (!result.isEmpty()) {
+            return new ResponseEntity<>(result, HttpStatus.OK);
+        } else {
+
+            return new ResponseEntity<>(result, HttpStatus.NOT_FOUND);
+        }
     }
 
 

@@ -14,7 +14,6 @@ public class PersonRepository  {
 
 
     public List<Person> getAllPersons() throws IOException {
-
         return readJsonFile("persons", Person.class);
     }
 
