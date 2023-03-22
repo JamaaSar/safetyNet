@@ -24,4 +24,18 @@ public class MedicalRecordService {
         return medicalRecordRepository.getMedicalRecordsList().stream().filter(medicalRecord -> (medicalRecord.getFirstName().toLowerCase()).equals(name.toLowerCase())).findFirst().get();
 
     }
+
+    public void update(){
+
+    }
+
+    public void add(){
+
+    }
+
+    public void delete(){
+
+    }
+
+
 }

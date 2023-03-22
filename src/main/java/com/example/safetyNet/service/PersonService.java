@@ -16,7 +16,8 @@ public class PersonService {
     private PersonRepository personRepository;
     @Autowired
     private MedicalRecordService medicalRecordService;
-    private MapperService mapper;
+    @Autowired
+    private MapperService mapperService;
 
    public List<Person> getAllPerson() throws IOException {
        return personRepository.getPersonsList();
@@ -30,10 +31,10 @@ public class PersonService {
         List<String> emails = this.getAllPerson().stream().filter(person -> person.getCity().equals(ville)).map(Person::getEmail).collect(Collectors.toList());
         return (emails.isEmpty() ? null : emails);
     }
-    public List<PersonInfoDto> getPersonInfo(String firstname, String lastname) throws IOException {
+    public List<PersonGeneralDto> getPersonInfo(String firstname, String lastname) throws IOException {
         List<Person> persons =  this.getAllPerson();
         List<Person> filteredPerson = persons.stream().filter(person -> person.getLastName().equals(lastname)).collect(Collectors.toList());
-        List<PersonInfoDto> res = mapper.getPersonsInfo(filteredPerson);
+        List<PersonGeneralDto> res = mapperService.getPersonsInfo(filteredPerson);
 
         return res;
     }
@@ -44,7 +45,7 @@ public class PersonService {
         List<Child> listChildren = new ArrayList<>();
         ChildAlertDto childAlertDto = new ChildAlertDto();
 
-        for (PersonDTO p: mapper.getAllInfoOfPerson(persons)){
+        for (PersonDTO p: mapperService.getAllInfoOfPerson(persons)){
             if(p.getAge() < 18){
                 Child child = new Child();
                 child.setFirstName(p.getFirstName());
@@ -69,6 +70,19 @@ public class PersonService {
         return childAlertDtos;
     }
 
+
+    //CRUD
+    public void update(){
+
+    }
+
+    public void add(){
+
+    }
+
+    public void delete(){
+
+    }
 
 
 

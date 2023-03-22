@@ -1,7 +1,7 @@
 package com.example.safetyNet.controller;
 
 import com.example.safetyNet.dto.ChildAlertDto;
-import com.example.safetyNet.dto.FireDto;
+import com.example.safetyNet.dto.PersonGeneralDto;
 import com.example.safetyNet.service.FireStationService;
 import com.example.safetyNet.service.PersonService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -84,7 +84,7 @@ public class UrlsController {
 
     @GetMapping("/fire")
     public  ResponseEntity getFire(@RequestParam(name="address", required = true) String address) throws IOException {
-        List<FireDto> result = fireStationService.getFire(address);
+        List<PersonGeneralDto> result = fireStationService.getFire(address);
 
         if (!result.isEmpty()) {
             return new ResponseEntity<>(result, HttpStatus.OK);

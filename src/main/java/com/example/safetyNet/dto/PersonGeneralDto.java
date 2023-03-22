@@ -12,7 +12,7 @@ import java.util.List;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class PersonInfoDto extends IPerson {
+public class PersonGeneralDto extends IPerson {
 
     private String address;
     private int age;

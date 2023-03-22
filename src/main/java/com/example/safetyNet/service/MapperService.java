@@ -1,11 +1,9 @@
 package com.example.safetyNet.service;
 
 import com.example.safetyNet.dto.PersonDTO;
-import com.example.safetyNet.dto.PersonInfoDto;
+import com.example.safetyNet.dto.PersonGeneralDto;
 import com.example.safetyNet.model.MedicalRecord;
 import com.example.safetyNet.model.Person;
-import com.example.safetyNet.service.CalculateAge;
-import com.example.safetyNet.service.MedicalRecordService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -39,10 +37,10 @@ public class MapperService {
         }
         return res;
     }
-    public List<PersonInfoDto> getPersonsInfo(List<Person> data) throws IOException {
-        List<PersonInfoDto> res = new ArrayList<>();
+    public List<PersonGeneralDto> getPersonsInfo(List<Person> data) throws IOException {
+        List<PersonGeneralDto> res = new ArrayList<>();
         for (Person p : data){
-            PersonInfoDto personInfoDto = new PersonInfoDto();
+            PersonGeneralDto personInfoDto = new PersonGeneralDto();
             MedicalRecord medicalRecord = medicalRecordService.getAllMedicalRecordsByName(p.getFirstName());
             personInfoDto.setFirstName(p.getFirstName());
             personInfoDto.setLastName(p.getLastName());

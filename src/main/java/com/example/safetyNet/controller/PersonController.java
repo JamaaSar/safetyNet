@@ -28,4 +28,22 @@ public class PersonController {
         }
     }
 
+    @PostMapping
+    public void add() throws IOException {
+        personService.add();
+
+    }
+
+    @PutMapping
+    public void update() throws IOException {
+        personService.update();
+
+    }
+
+    @DeleteMapping
+    public void delete() throws IOException {
+        personService.delete();
+
+    }
+
 }

@@ -36,14 +36,6 @@ public class MedicalRecordRepository {
     }
 
 
-//    public List<MedicalRecord> getAllMedicalRecords() throws IOException {
-//
-//        return readJsonFile("medicalrecords", MedicalRecord.class);
-//    }
-//
- //  public MedicalRecord getAllMedicalRecordsByName(String key, String value) throws IOException {
-//
-   //     return readJsonFileFilter("medicalrecords", key, value, MedicalRecord.class);
-   // }
+
 
 }
