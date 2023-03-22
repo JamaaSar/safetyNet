@@ -19,7 +19,7 @@ import java.util.List;
 
 @Service
 public class LoadDataFromJson {
-
+//component ?
     @Autowired
     PersonRepository personRepository;
     @Autowired

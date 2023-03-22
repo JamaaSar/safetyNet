@@ -15,7 +15,6 @@ import java.util.List;
         private String address;
         private int age;
         private String email;
-
         private String city;
         private String zip;
         private String phone;
