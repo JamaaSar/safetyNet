@@ -7,15 +7,22 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.example.safetyNet.service.LoadDataFromJson.readJsonFile;
 
 @Repository
 public class PersonRepository  {
 
 
-    public List<Person> getAllPersons() throws IOException {
-        return readJsonFile("persons", Person.class);
+    private List<Person> personsList;
+
+    public List<Person> getPersonsList() {
+        return personsList;
     }
+
+    public void setPersonsList(List<Person> personsList) {
+        this.personsList = personsList;
+    }
+
+
 
 
 

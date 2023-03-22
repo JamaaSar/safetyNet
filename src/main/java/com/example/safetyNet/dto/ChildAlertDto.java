@@ -1,9 +1,10 @@
 package com.example.safetyNet.dto;
 
+import com.example.safetyNet.model.IPerson;
 import com.example.safetyNet.model.Person;
 import lombok.AllArgsConstructor;
-import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Getter;
 import lombok.Setter;
 
 import java.util.List;
@@ -12,12 +13,10 @@ import java.util.List;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class ChildAlertDto {
-    private String firstName;
-    private String lastName;
-    private int age;
-    private List<Person> adults;
+public class ChildAlertDto  {
 
+    private List<Child> childList;
+    private List<Person> adultList;
 
 
 }
