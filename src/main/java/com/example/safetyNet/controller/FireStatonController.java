@@ -13,23 +13,24 @@ public class FireStatonController {
     @Autowired
     FireStationService fireStationService;
 
-
-
     @PostMapping
-    public void add() throws IOException {
-        fireStationService.add();
+    public void add(@RequestParam(name = "address") String address,
+                    @RequestParam(name = "station") String station) throws IOException {
+        fireStationService.add(address,station);
 
     }
 
     @PutMapping
-    public void update() throws IOException {
-        fireStationService.update();
+    public void update(@RequestParam(name = "address") String address,
+                       @RequestParam(name = "station") String station) throws IOException {
+        fireStationService.update(address, station);
 
     }
 
     @DeleteMapping
-    public void delete() throws IOException {
-        fireStationService.delete();
+    public void delete(@RequestParam(name = "address") String address,
+                       @RequestParam(name = "station") String station) throws IOException {
+        fireStationService.delete(address,station);
 
     }
 

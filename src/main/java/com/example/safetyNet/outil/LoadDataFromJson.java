@@ -1,4 +1,4 @@
-package com.example.safetyNet.service;
+package com.example.safetyNet.outil;
 
 import com.example.safetyNet.model.FireStation;
 import com.example.safetyNet.model.MedicalRecord;

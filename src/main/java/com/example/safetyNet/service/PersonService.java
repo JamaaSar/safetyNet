@@ -13,11 +13,11 @@ import java.util.stream.Collectors;
 @Service
 public class PersonService {
     @Autowired
-    private PersonRepository personRepository;
+    PersonRepository personRepository;
     @Autowired
-    private MedicalRecordService medicalRecordService;
+    MedicalRecordService medicalRecordService;
     @Autowired
-    private MapperService mapperService;
+    MapperService mapperService;
 
    public List<Person> getAllPerson() throws IOException {
        return personRepository.getPersonsList();
@@ -72,15 +72,29 @@ public class PersonService {
 
 
     //CRUD
-    public void update(){
+    public void update(String firstname, String lastname, String address, String city, String zip,String phone, String email){
 
     }
 
-    public void add(){
+    public void add(String firstname, String lastname, String address, String city, String zip,String phone, String email){
+       Person person = new Person();
+       person.setFirstName(firstname);
+       person.setLastName(lastname);
+       person.setAddress(address);
+       person.setCity(city);
+       person.setZip(zip);
+       person.setPhone(phone);
+       person.setEmail(email);
+       personRepository.getPersonsList().add(person);
 
     }
 
-    public void delete(){
+    public void delete(String firstname, String lastname){
+       for(Person p : personRepository.getPersonsList()){
+           if(firstname.equals(p.getFirstName()) && lastname.equals(p.getLastName())){
+               personRepository.getPersonsList().remove(p);
+           }
+        }
 
     }
 

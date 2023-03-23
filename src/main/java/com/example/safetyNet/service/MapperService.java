@@ -4,6 +4,7 @@ import com.example.safetyNet.dto.PersonDTO;
 import com.example.safetyNet.dto.PersonGeneralDto;
 import com.example.safetyNet.model.MedicalRecord;
 import com.example.safetyNet.model.Person;
+import com.example.safetyNet.outil.CalculateAge;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

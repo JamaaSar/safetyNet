@@ -30,7 +30,6 @@ public class UrlsController {
         if (!personList.isEmpty()) {
             return new ResponseEntity<>(personList, HttpStatus.OK);
         } else {
-
             return new ResponseEntity<>(personList, HttpStatus.NOT_FOUND);
         }
     }
@@ -41,7 +40,6 @@ public class UrlsController {
         if (!personList.isEmpty()) {
             return new ResponseEntity<>(personList, HttpStatus.OK);
         } else {
-
             return new ResponseEntity<>(personList, HttpStatus.NOT_FOUND);
         }
     }
@@ -52,7 +50,6 @@ public class UrlsController {
         if (!personList.isEmpty()) {
             return new ResponseEntity<>(personList, HttpStatus.OK);
         } else {
-
             return new ResponseEntity<>(personList, HttpStatus.NOT_FOUND);
         }
 
@@ -65,7 +62,6 @@ public class UrlsController {
         if (!result.isEmpty()) {
             return new ResponseEntity<>(result, HttpStatus.OK);
         } else {
-
             return new ResponseEntity<>(result, HttpStatus.NOT_FOUND);
         }
     }
@@ -77,7 +73,6 @@ public class UrlsController {
         if (!result.isEmpty()) {
             return new ResponseEntity<>(result, HttpStatus.OK);
         } else {
-
             return new ResponseEntity<>(result, HttpStatus.NOT_FOUND);
         }
     }
@@ -89,10 +84,10 @@ public class UrlsController {
         if (!result.isEmpty()) {
             return new ResponseEntity<>(result, HttpStatus.OK);
         } else {
-
             return new ResponseEntity<>(result, HttpStatus.NOT_FOUND);
         }
     }
+
     @GetMapping("/flood")
     public  ResponseEntity getFlood(@RequestParam(name="stations", required = true) List<String> stations) throws IOException {
         List<List<?>>result = fireStationService.getFlood(stations);
@@ -100,10 +95,8 @@ public class UrlsController {
         if (!result.isEmpty()) {
             return new ResponseEntity<>(result, HttpStatus.OK);
         } else {
-
             return new ResponseEntity<>(result, HttpStatus.NOT_FOUND);
         }
     }
-
 
 }

@@ -1,4 +1,4 @@
-package com.example.safetyNet.service;
+package com.example.safetyNet.outil;
 
 import java.time.DateTimeException;
 import java.time.LocalDate;

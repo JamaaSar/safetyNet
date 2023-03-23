@@ -2,6 +2,7 @@ package com.example.safetyNet.model;
 
 
 import lombok.*;
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor

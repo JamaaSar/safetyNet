@@ -1,7 +1,6 @@
 package com.example.safetyNet.dto;
 
 import com.example.safetyNet.model.IPerson;
-import com.example.safetyNet.model.Person;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

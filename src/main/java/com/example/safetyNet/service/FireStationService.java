@@ -15,16 +15,13 @@ import java.util.stream.Collectors;
 public class FireStationService {
 
     @Autowired
-    private MedicalRecordService medicalRecordService;
+    MedicalRecordService medicalRecordService;
     @Autowired
-    private FireStationRepository fireStationRepository;
-
+    FireStationRepository fireStationRepository;
     @Autowired
     PersonService personService;
-
     @Autowired
     MapperService mapperService;
-
 
     public List<FireStation> getFireStationsByStation(String param) {
         return fireStationRepository.getFireStationsList().stream().filter(fireStation -> fireStation.getStation().equals(param)).collect(Collectors.toList());
@@ -70,19 +67,25 @@ public class FireStationService {
         return null;
     }
 
-
-
-
     //CRUD
-    public void update(){
+    public void update(String address, String station){
 
     }
 
-    public void add(){
+    public void add(String address, String station){
+        FireStation fireStation = new FireStation();
+        fireStation.setAddress(address);
+        fireStation.setStation(station);
+        fireStationRepository.getFireStationsList().add(fireStation);
 
     }
 
-    public void delete(){
+    public void delete(String address,String station){
+        for(FireStation f : fireStationRepository.getFireStationsList()){
+            if(station.equals(f.getStation()) && address.equals(f.getAddress()) ){
+                fireStationRepository.getFireStationsList().remove(f);
+            }
+        }
 
     }
 

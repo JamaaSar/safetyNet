@@ -10,7 +10,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class IPerson
 {
-
     private String firstName;
     private String lastName;
 
