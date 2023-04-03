@@ -1,5 +1,6 @@
 package com.example.safetyNet.service;
 
+import com.example.safetyNet.dto.UpdateMedicalRecordDTO;
 import com.example.safetyNet.model.MedicalRecord;
 import com.example.safetyNet.model.Person;
 import com.example.safetyNet.repository.MedicalRecordRepository;
@@ -16,38 +17,40 @@ public class MedicalRecordService {
     @Autowired
     MedicalRecordRepository medicalRecordRepository;
 
-    public List<MedicalRecord> getAllMedicalRecords() throws IOException {
+    public List<MedicalRecord> getAllMedicalRecords()  {
         return medicalRecordRepository.getMedicalRecordsList();
-
     }
 
     public MedicalRecord getAllMedicalRecordsByName(String name) throws IOException {
         return medicalRecordRepository.getMedicalRecordsList().stream().filter(medicalRecord -> (medicalRecord.getFirstName().toLowerCase()).equals(name.toLowerCase())).findFirst().get();
-
     }
 
-    public void update(String firstName, String lastName, String birthdate, List<String> medications, List<String> allergies){
-
+    public MedicalRecord getAllMedicalRecordsByFirstAndLastName(String firstname, String lastname )  {
+        return medicalRecordRepository.getMedicalRecordsList().stream().filter(medicalRecord -> (medicalRecord.getFirstName().toLowerCase()).equals(firstname.toLowerCase()) && (medicalRecord.getLastName().toLowerCase()).equals(lastname.toLowerCase())).findFirst().get();
     }
 
-    public void add(String firstName, String lastName, String birthdate, List<String> medications, List<String> allergies){
-        MedicalRecord medicalRecord = new MedicalRecord();
-        medicalRecord.setLastName(lastName);
-        medicalRecord.setFirstName(firstName);
-        medicalRecord.setBirthdate(birthdate);
-        medicalRecord.setMedications(new ArrayList<>());
-        medicalRecord.setAllergies(new ArrayList<>());
-
+    public MedicalRecord update(String firstName, String lastName, UpdateMedicalRecordDTO updateMedicalRecordDTO){
+        MedicalRecord medicalRecordToUpdate = this.getAllMedicalRecordsByFirstAndLastName(firstName, lastName);
+        if(!updateMedicalRecordDTO.getBirthdate().isEmpty()){
+            medicalRecordToUpdate.setBirthdate(updateMedicalRecordDTO.getBirthdate());
+        }
+        if(!updateMedicalRecordDTO.getMedications().isEmpty()){
+           // medicalRecordToUpdate.setMedications(updateMedicalRecordDTO.getBirthdate());
+        }
+        return medicalRecordToUpdate;
     }
 
-    public void delete(String firstName, String lastName){
-        for(MedicalRecord m : medicalRecordRepository.getMedicalRecordsList()){
+    public MedicalRecord add(MedicalRecord medicalRecord){
+        this.getAllMedicalRecords().add(medicalRecord);
+        return medicalRecord;
+    }
+
+    public List<MedicalRecord> delete(String firstName, String lastName){
+        for(MedicalRecord m : this.getAllMedicalRecords()){
             if(firstName.equals(m.getFirstName()) && lastName.equals(m.getLastName())){
                 medicalRecordRepository.getMedicalRecordsList().remove(m);
             }
         }
-
+        return this.getAllMedicalRecords();
     }
-
-
 }

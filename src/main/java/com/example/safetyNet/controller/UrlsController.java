@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.io.IOException;
 import java.util.List;
-import java.util.Map;
 
 @RestController
 @RequestMapping("/")
@@ -25,78 +24,38 @@ public class UrlsController {
     FireStationService fireStationService;
 
     @GetMapping("/communityEmail")
-    public ResponseEntity getEm(@RequestParam(name = "city", required = true) String city) throws IOException {
-        List<?> personList = personService.getAllEmails(city);
-        if (!personList.isEmpty()) {
-            return new ResponseEntity<>(personList, HttpStatus.OK);
-        } else {
-            return new ResponseEntity<>(personList, HttpStatus.NOT_FOUND);
-        }
+    public ResponseEntity<List<String>> getCommunityEmail(@RequestParam(name="city") String city)  {
+        return new ResponseEntity<>(personService.getAllEmails(city), HttpStatus.OK);
     }
 
     @GetMapping("/personInfo")
-    public ResponseEntity getPersonInfo(@RequestParam(name = "firstName", required = true) String firstName, @RequestParam(name = "lastName", required = true) String lastName) throws IOException {
-        List<?> personList = personService.getPersonInfo(firstName, lastName);
-        if (!personList.isEmpty()) {
-            return new ResponseEntity<>(personList, HttpStatus.OK);
-        } else {
-            return new ResponseEntity<>(personList, HttpStatus.NOT_FOUND);
-        }
+    public ResponseEntity<List<PersonGeneralDto>> getPersonInfo(@RequestParam(name="firstName") String firstName, @RequestParam(name="lastName") String lastName) throws IOException {
+        return new ResponseEntity<>(personService.getPersonInfo(firstName, lastName), HttpStatus.OK);
     }
 
     @GetMapping("/childAlert")
-    public ResponseEntity getChild(@RequestParam(name = "address", required = true) String address) throws IOException {
-        List<ChildAlertDto> personList = personService.getChildAlert(address);
-        if (!personList.isEmpty()) {
-            return new ResponseEntity<>(personList, HttpStatus.OK);
-        } else {
-            return new ResponseEntity<>(personList, HttpStatus.NOT_FOUND);
-        }
-
+    public ResponseEntity<List<ChildAlertDto>> getChild(@RequestParam(name="address") String address) throws IOException {
+        return new ResponseEntity<>(personService.getChildAlert(address), HttpStatus.OK);
     }
 
     @GetMapping("/firestation")
-    public  ResponseEntity getFireStationByStationNumber(@RequestParam(name="stationNumber", required = true) String stationNumber) throws IOException {
-        List<Map<String, List<?>>> result = fireStationService.getFireStaionById(stationNumber);
-
-        if (!result.isEmpty()) {
-            return new ResponseEntity<>(result, HttpStatus.OK);
-        } else {
-            return new ResponseEntity<>(result, HttpStatus.NOT_FOUND);
-        }
+    public  ResponseEntity getFireStationByStationNumber(@RequestParam(name="stationNumber") String stationNumber) throws IOException {
+        return new ResponseEntity<>(fireStationService.getFireStaionById(stationNumber), HttpStatus.OK);
     }
 
     @GetMapping("/phoneAlert")
-    public  ResponseEntity getFireStation(@RequestParam(name="firestation", required = true) String firestation) throws IOException {
-        List<List<?>>result = fireStationService.getFireStaion(firestation);
-
-        if (!result.isEmpty()) {
-            return new ResponseEntity<>(result, HttpStatus.OK);
-        } else {
-            return new ResponseEntity<>(result, HttpStatus.NOT_FOUND);
-        }
+    public  ResponseEntity<List<List<String>>> getFireStation(@RequestParam(name="firestation") String firestation) throws IOException {
+        return new ResponseEntity<>(fireStationService.getFireStaion(firestation), HttpStatus.OK);
     }
 
     @GetMapping("/fire")
-    public  ResponseEntity getFire(@RequestParam(name="address", required = true) String address) throws IOException {
-        List<PersonGeneralDto> result = fireStationService.getFire(address);
-
-        if (!result.isEmpty()) {
-            return new ResponseEntity<>(result, HttpStatus.OK);
-        } else {
-            return new ResponseEntity<>(result, HttpStatus.NOT_FOUND);
-        }
+    public  ResponseEntity<List<PersonGeneralDto>> getFire(@RequestParam(name="address") String address) throws IOException {
+        return new ResponseEntity<>(fireStationService.getFire(address), HttpStatus.OK);
     }
 
     @GetMapping("/flood")
-    public  ResponseEntity getFlood(@RequestParam(name="stations", required = true) List<String> stations) throws IOException {
-        List<List<?>>result = fireStationService.getFlood(stations);
-
-        if (!result.isEmpty()) {
-            return new ResponseEntity<>(result, HttpStatus.OK);
-        } else {
-            return new ResponseEntity<>(result, HttpStatus.NOT_FOUND);
-        }
+    public  ResponseEntity getFlood(@RequestParam(name="stations") List<String> stations) throws IOException {
+        return new ResponseEntity<>(fireStationService.getFlood(stations), HttpStatus.OK);
     }
 
 }

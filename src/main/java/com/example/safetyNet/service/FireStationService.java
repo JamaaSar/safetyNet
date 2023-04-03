@@ -1,7 +1,9 @@
 package com.example.safetyNet.service;
 
 import com.example.safetyNet.dto.PersonGeneralDto;
+import com.example.safetyNet.exception.NotFoundException;
 import com.example.safetyNet.model.FireStation;
+import com.example.safetyNet.model.MedicalRecord;
 import com.example.safetyNet.model.Person;
 import com.example.safetyNet.repository.FireStationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,19 +49,22 @@ public class FireStationService {
         }
         return result;
     }
-    public List<List<?>> getFireStaion(String param) throws IOException {
-        List<List<?>> result = new ArrayList();
+
+    public List<List<String>> getFireStaion(String param) throws IOException {
+        List<List<String>> result = new ArrayList();
         for(FireStation f : this.getFireStationsByStation(param)){
             List<String> phones= personService.getAllPerson().stream().filter(person -> person.getAddress().equals(f.getAddress())).map(Person::getPhone).collect(Collectors.toList());
             result.add(phones);
         }
         return result;
     }
+
     public List<PersonGeneralDto> getFire(String param) throws IOException {
         List<Person> persons = personService.getAllPerson().stream().filter(person -> (person.getAddress().toLowerCase()).replaceAll("\\s+","").equals(param.toLowerCase())).collect(Collectors.toList());
         List<PersonGeneralDto> res = mapperService.getPersonsInfo(persons);
         return res;
     }
+
     public List<List<?>> getFlood(List<String> stations) throws IOException {
        for(String s : stations){
 
@@ -67,27 +72,25 @@ public class FireStationService {
         return null;
     }
 
-    //CRUD
-    public void update(String address, String station){
-
+    public FireStation update(String address, String station){
+        FireStation fireStationToUpdate = fireStationRepository.getFireStationsList().stream().filter(fireStation -> fireStation.getAddress().equals(address)).findFirst().orElseThrow(() -> new NotFoundException("Firestation with address '" + address +  "' not found"));
+        if(!station.isEmpty()){
+            fireStationToUpdate.setStation(station);
+        }
+        return fireStationToUpdate;
     }
 
-    public void add(String address, String station){
-        FireStation fireStation = new FireStation();
-        fireStation.setAddress(address);
-        fireStation.setStation(station);
+    public FireStation add(FireStation fireStation){
         fireStationRepository.getFireStationsList().add(fireStation);
-
+        return fireStation;
     }
 
-    public void delete(String address,String station){
+    public List<FireStation> delete(String address){
         for(FireStation f : fireStationRepository.getFireStationsList()){
-            if(station.equals(f.getStation()) && address.equals(f.getAddress()) ){
+            if(address.equals(f.getAddress()) ){
                 fireStationRepository.getFireStationsList().remove(f);
             }
         }
-
+        return fireStationRepository.getFireStationsList();
     }
-
-
 }

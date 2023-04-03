@@ -1,6 +1,7 @@
 package com.example.safetyNet.service;
 
 import com.example.safetyNet.dto.*;
+import com.example.safetyNet.exception.NotFoundException;
 import com.example.safetyNet.model.Person;
 import com.example.safetyNet.repository.PersonRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,25 +20,26 @@ public class PersonService {
     @Autowired
     MapperService mapperService;
 
-   public List<Person> getAllPerson() throws IOException {
+   public List<Person> getAllPerson() {
        return personRepository.getPersonsList();
    }
     public List<Person> getPersonByAddresse(String addresse) throws IOException {
         return this.getAllPerson().stream().filter(person -> (person.getAddress().toLowerCase()).replaceAll("\\s+","").equals(addresse.toLowerCase())).collect(Collectors.toList());
-
     }
-    public List<String> getAllEmails(String param) throws IOException {
+
+    public List<String> getAllEmails(String param)  {
         String ville = param.substring(0, 1).toUpperCase() + param.substring(1);
         List<String> emails = this.getAllPerson().stream().filter(person -> person.getCity().equals(ville)).map(Person::getEmail).collect(Collectors.toList());
         return (emails.isEmpty() ? null : emails);
     }
+
     public List<PersonGeneralDto> getPersonInfo(String firstname, String lastname) throws IOException {
         List<Person> persons =  this.getAllPerson();
         List<Person> filteredPerson = persons.stream().filter(person -> person.getLastName().equals(lastname)).collect(Collectors.toList());
         List<PersonGeneralDto> res = mapperService.getPersonsInfo(filteredPerson);
-
         return res;
     }
+
     public List<ChildAlertDto> getChildAlert(String addresse) throws IOException {
         List<Person> persons = this.getPersonByAddresse(addresse);
         List<ChildAlertDto> childAlertDtos = new ArrayList<>();
@@ -66,38 +68,44 @@ public class PersonService {
         childAlertDto.setAdultList(listAdults);
         childAlertDto.setChildList(listChildren);
         childAlertDtos.add(childAlertDto);
-
         return childAlertDtos;
     }
 
-
-    //CRUD
-    public void update(String firstname, String lastname, String address, String city, String zip,String phone, String email){
-
+    public Person update(String firstname, String lastname, UpdatePersonDTO updatePersonDTO){
+        Person personToUpdate= this.getPersonByFirstnameLastName(firstname, lastname);
+        if(!updatePersonDTO.getAddress().isEmpty()){
+            personToUpdate.setAddress(updatePersonDTO.getAddress());
+        }
+        return personToUpdate;
     }
 
-    public void add(String firstname, String lastname, String address, String city, String zip,String phone, String email){
-       Person person = new Person();
-       person.setFirstName(firstname);
-       person.setLastName(lastname);
-       person.setAddress(address);
-       person.setCity(city);
-       person.setZip(zip);
-       person.setPhone(phone);
-       person.setEmail(email);
+    public Person add(Person person){
        personRepository.getPersonsList().add(person);
-
+       return person;
     }
 
-    public void delete(String firstname, String lastname){
+    public List<Person> delete(String firstname, String lastname){
        for(Person p : personRepository.getPersonsList()){
            if(firstname.equals(p.getFirstName()) && lastname.equals(p.getLastName())){
                personRepository.getPersonsList().remove(p);
            }
         }
-
+       return personRepository.getPersonsList();
     }
 
+    public Person getPersonByFirstname(String firstname) {
+        List<Person> lPersons = this.getAllPerson();
+        Optional<Person> personBox = lPersons.stream().filter(p -> firstname.equals(p.getFirstName())).findAny();
+        if(personBox.isEmpty()) {
+            throw new NotFoundException("toto");
+        }
+        return personBox.get();
+    }
+
+    private Person getPersonByFirstnameLastName(String firstname, String lastname) {
+        Person personToUpdateD = personRepository.getPersonsList().stream().filter(person -> person.getLastName().equals(lastname) && person.getFirstName().equals(firstname)).findFirst().orElseThrow(() -> new NotFoundException("Person with firstname '" + firstname + "' and lastname '" + lastname + "' not found"));
+        return personToUpdateD;
+    }
 
 
 
