@@ -1,6 +1,7 @@
 package com.example.safetyNet.controller;
 
 import com.example.safetyNet.dto.ChildAlertDto;
+import com.example.safetyNet.dto.FloodDTO;
 import com.example.safetyNet.dto.PersonGeneralDto;
 import com.example.safetyNet.service.FireStationService;
 import com.example.safetyNet.service.PersonService;
@@ -24,38 +25,54 @@ public class UrlsController {
     FireStationService fireStationService;
 
     @GetMapping("/communityEmail")
-    public ResponseEntity<List<String>> getCommunityEmail(@RequestParam(name="city") String city)  {
+    public ResponseEntity<List<String>> getCommunityEmail(
+            @RequestParam(name = "city") String city) {
         return new ResponseEntity<>(personService.getAllEmails(city), HttpStatus.OK);
     }
 
     @GetMapping("/personInfo")
-    public ResponseEntity<List<PersonGeneralDto>> getPersonInfo(@RequestParam(name="firstName") String firstName, @RequestParam(name="lastName") String lastName) throws IOException {
-        return new ResponseEntity<>(personService.getPersonInfo(firstName, lastName), HttpStatus.OK);
+    public ResponseEntity<List<PersonGeneralDto>> getPersonInfo(
+            @RequestParam(name = "firstName") String firstName,
+            @RequestParam(name = "lastName") String lastName) throws IOException {
+        return new ResponseEntity<>(personService.getPersonInfo(firstName, lastName),
+                HttpStatus.OK);
     }
 
     @GetMapping("/childAlert")
-    public ResponseEntity<List<ChildAlertDto>> getChild(@RequestParam(name="address") String address) throws IOException {
-        return new ResponseEntity<>(personService.getChildAlert(address), HttpStatus.OK);
+    public ResponseEntity<List<ChildAlertDto>> getChild(
+            @RequestParam(name = "address") String address) throws IOException {
+        return new ResponseEntity<>(personService.getChildAlert(address),
+                HttpStatus.OK);
     }
 
     @GetMapping("/firestation")
-    public  ResponseEntity getFireStationByStationNumber(@RequestParam(name="stationNumber") String stationNumber) throws IOException {
-        return new ResponseEntity<>(fireStationService.getFireStaionById(stationNumber), HttpStatus.OK);
+    public ResponseEntity getFireStationByStationNumber(
+            @RequestParam(name = "stationNumber") String stationNumber)
+            throws IOException {
+        return new ResponseEntity<>(
+                fireStationService.getFireStationById(stationNumber),
+                HttpStatus.OK);
     }
 
     @GetMapping("/phoneAlert")
-    public  ResponseEntity<List<List<String>>> getFireStation(@RequestParam(name="firestation") String firestation) throws IOException {
-        return new ResponseEntity<>(fireStationService.getFireStaion(firestation), HttpStatus.OK);
+    public ResponseEntity<List<List<String>>> getFireStation(
+            @RequestParam(name = "firestation") String fireStation) throws IOException {
+        return new ResponseEntity<>(fireStationService.getFireStation(fireStation),
+                HttpStatus.OK);
     }
 
     @GetMapping("/fire")
-    public  ResponseEntity<List<PersonGeneralDto>> getFire(@RequestParam(name="address") String address) throws IOException {
-        return new ResponseEntity<>(fireStationService.getFire(address), HttpStatus.OK);
+    public ResponseEntity<List<PersonGeneralDto>> getFire(
+            @RequestParam(name = "address") String address) throws IOException {
+        return new ResponseEntity<>(fireStationService.getFire(address),
+                HttpStatus.OK);
     }
 
-    @GetMapping("/flood")
-    public  ResponseEntity getFlood(@RequestParam(name="stations") List<String> stations) throws IOException {
-        return new ResponseEntity<>(fireStationService.getFlood(stations), HttpStatus.OK);
+    @GetMapping("/flood/stations")
+    public ResponseEntity<List<FloodDTO>> getFlood(
+            @RequestParam(name = "stations") List<String> stations) throws IOException {
+        return new ResponseEntity<>(fireStationService.getFlood(stations),
+                HttpStatus.OK);
     }
 
 }

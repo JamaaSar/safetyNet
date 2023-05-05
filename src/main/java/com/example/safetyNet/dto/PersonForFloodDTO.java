@@ -1,22 +1,32 @@
 package com.example.safetyNet.dto;
 
+import com.example.safetyNet.model.CommonInfoPerson;
 
 import java.util.List;
 
-public class UpdateMedicalRecordDTO {
-    private String birthdate;
+public class PersonForFloodDTO extends CommonInfoPerson {
+    private String phone;
+    private int age;
     private List<String> medications;
     private List<String> allergies;
 
-    public UpdateMedicalRecordDTO() {
+    public PersonForFloodDTO() {
     }
 
-    public String getBirthdate() {
-        return birthdate;
+    public String getPhone() {
+        return phone;
     }
 
-    public void setBirthdate(String birthdate) {
-        this.birthdate = birthdate;
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
+
+    public int getAge() {
+        return age;
+    }
+
+    public void setAge(int age) {
+        this.age = age;
     }
 
     public List<String> getMedications() {

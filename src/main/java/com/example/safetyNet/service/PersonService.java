@@ -9,104 +9,117 @@ import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.util.*;
-import java.util.stream.Collectors;
 
 @Service
 public class PersonService {
     @Autowired
     PersonRepository personRepository;
     @Autowired
-    MedicalRecordService medicalRecordService;
-    @Autowired
     MapperService mapperService;
 
-   public List<Person> getAllPerson() {
-       return personRepository.getPersonsList();
-   }
-    public List<Person> getPersonByAddresse(String addresse) throws IOException {
-        return this.getAllPerson().stream().filter(person -> (person.getAddress().toLowerCase()).replaceAll("\\s+","").equals(addresse.toLowerCase())).collect(Collectors.toList());
+    public List<Person> getAllPerson() {
+        return personRepository.getPersonsList();
     }
 
-    public List<String> getAllEmails(String param)  {
-        String ville = param.substring(0, 1).toUpperCase() + param.substring(1);
-        List<String> emails = this.getAllPerson().stream().filter(person -> person.getCity().equals(ville)).map(Person::getEmail).collect(Collectors.toList());
-        return (emails.isEmpty() ? null : emails);
+    public List<Person> getPersonByAddress(String param) {
+        return personRepository.getPersonByAddress(param);
     }
 
-    public List<PersonGeneralDto> getPersonInfo(String firstname, String lastname) throws IOException {
-        List<Person> persons =  this.getAllPerson();
-        List<Person> filteredPerson = persons.stream().filter(person -> person.getLastName().equals(lastname)).collect(Collectors.toList());
-        List<PersonGeneralDto> res = mapperService.getPersonsInfo(filteredPerson);
+
+    public List<String> getAllEmails(String city) {
+        List<String> emails = new ArrayList<>();
+        List<Person> persons = personRepository.getPersonByCity(city);
+
+        if (persons.isEmpty()) {
+            throw new NotFoundException("No data found");
+        } else {
+            for (Person p : persons) {
+                emails.add(p.getEmail());
+            }
+        }
+        return emails;
+    }
+
+    public List<PersonGeneralDto> getPersonInfo(String firstname, String lastname)
+            throws IOException {
+        List<Person> persons = personRepository.getPersonsByFirstnameLastName(firstname,
+                lastname);
+
+        List<PersonGeneralDto> res = mapperService.getPersonsInfo(persons);
+        if (res.isEmpty()) {
+            throw new NotFoundException("No data found");
+        }
         return res;
     }
 
-    public List<ChildAlertDto> getChildAlert(String addresse) throws IOException {
-        List<Person> persons = this.getPersonByAddresse(addresse);
+    public List<ChildAlertDto> getChildAlert(String address) throws IOException {
+        List<Person> persons = personRepository.getPersonByAddress(address);
         List<ChildAlertDto> childAlertDtos = new ArrayList<>();
         List<Person> listAdults = new ArrayList<>();
         List<Child> listChildren = new ArrayList<>();
         ChildAlertDto childAlertDto = new ChildAlertDto();
-
-        for (PersonDTO p: mapperService.getAllInfoOfPerson(persons)){
-            if(p.getAge() < 18){
-                Child child = new Child();
-                child.setFirstName(p.getFirstName());
-                child.setLastName(p.getLastName());
-                child.setAge(p.getAge());
-                listChildren.add(child);
-            }else{
-                Person person = new Person();
-                person.setFirstName(p.getFirstName());
-                person.setLastName(p.getLastName());
-                person.setAddress(p.getAddress());
-                person.setZip(p.getZip());
-                person.setCity(p.getCity());
-                person.setPhone(p.getPhone());
-                listAdults.add(person);
+        List<PersonDTO> personDTOList = mapperService.getAllInfoOfPerson(persons);
+        if (!personDTOList.isEmpty()) {
+            for (PersonDTO p : personDTOList) {
+                if (p.getAge() < 18) {
+                    Child child = new Child();
+                    child.setFirstName(p.getFirstName());
+                    child.setLastName(p.getLastName());
+                    child.setAge(p.getAge());
+                    listChildren.add(child);
+                } else {
+                    Person person = new Person();
+                    person.setFirstName(p.getFirstName());
+                    person.setLastName(p.getLastName());
+                    person.setAddress(p.getAddress());
+                    person.setZip(p.getZip());
+                    person.setCity(p.getCity());
+                    person.setPhone(p.getPhone());
+                    listAdults.add(person);
+                }
             }
+            childAlertDto.setAdultList(listAdults);
+            childAlertDto.setChildList(listChildren);
+            childAlertDtos.add(childAlertDto);
+        } else {
+            throw new NotFoundException("No children found");
         }
-        childAlertDto.setAdultList(listAdults);
-        childAlertDto.setChildList(listChildren);
-        childAlertDtos.add(childAlertDto);
+
         return childAlertDtos;
     }
 
-    public Person update(String firstname, String lastname, UpdatePersonDTO updatePersonDTO){
-        Person personToUpdate= this.getPersonByFirstnameLastName(firstname, lastname);
-        if(!updatePersonDTO.getAddress().isEmpty()){
+    public Person update(String firstname, String lastname,
+                         UpdatePersonDTO updatePersonDTO) {
+        Person personToUpdate =
+                personRepository.getPersonByFirstnameLastName(firstname, lastname);
+        if (!updatePersonDTO.getAddress().isEmpty()) {
             personToUpdate.setAddress(updatePersonDTO.getAddress());
+        }
+        if (!updatePersonDTO.getEmail().isEmpty()) {
+            personToUpdate.setEmail(updatePersonDTO.getEmail());
+        }
+        if (!updatePersonDTO.getCity().isEmpty()) {
+            personToUpdate.setCity(updatePersonDTO.getCity());
+        }
+        if (!updatePersonDTO.getZip().isEmpty()) {
+            personToUpdate.setZip(updatePersonDTO.getZip());
+        }
+        if (!updatePersonDTO.getPhone().isEmpty()) {
+            personToUpdate.setPhone(updatePersonDTO.getPhone());
         }
         return personToUpdate;
     }
 
-    public Person add(Person person){
-       personRepository.getPersonsList().add(person);
-       return person;
+    public List<Person> ajouter(Person person) {
+        return personRepository.ajouter(person);
     }
 
-    public List<Person> delete(String firstname, String lastname){
-       for(Person p : personRepository.getPersonsList()){
-           if(firstname.equals(p.getFirstName()) && lastname.equals(p.getLastName())){
-               personRepository.getPersonsList().remove(p);
-           }
-        }
-       return personRepository.getPersonsList();
-    }
+    public List<Person> delete(String firstname, String lastname) {
+        Person personToDel =
+                personRepository.getPersonByFirstnameLastName(firstname, lastname);
+        return personRepository.remove(personToDel);
 
-    public Person getPersonByFirstname(String firstname) {
-        List<Person> lPersons = this.getAllPerson();
-        Optional<Person> personBox = lPersons.stream().filter(p -> firstname.equals(p.getFirstName())).findAny();
-        if(personBox.isEmpty()) {
-            throw new NotFoundException("toto");
-        }
-        return personBox.get();
     }
-
-    private Person getPersonByFirstnameLastName(String firstname, String lastname) {
-        Person personToUpdateD = personRepository.getPersonsList().stream().filter(person -> person.getLastName().equals(lastname) && person.getFirstName().equals(firstname)).findFirst().orElseThrow(() -> new NotFoundException("Person with firstname '" + firstname + "' and lastname '" + lastname + "' not found"));
-        return personToUpdateD;
-    }
-
 
 
 }

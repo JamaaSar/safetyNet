@@ -1,6 +1,7 @@
 package com.example.safetyNet.service;
 
 import com.example.safetyNet.dto.PersonDTO;
+import com.example.safetyNet.dto.PersonForFloodDTO;
 import com.example.safetyNet.dto.PersonGeneralDto;
 import com.example.safetyNet.model.MedicalRecord;
 import com.example.safetyNet.model.Person;
@@ -21,9 +22,10 @@ public class MapperService {
 
     public List<PersonDTO> getAllInfoOfPerson(List<Person> data) throws IOException {
         List<PersonDTO> res = new ArrayList<>();
-        for (Person p : data){
+        for (Person p : data) {
             PersonDTO personDTO = new PersonDTO();
-            MedicalRecord medicalRecord = medicalRecordService.getAllMedicalRecordsByName(p.getFirstName());
+            MedicalRecord medicalRecord =
+                    medicalRecordService.getAllMedicalRecordsByName(p.getFirstName());
             personDTO.setFirstName(p.getFirstName());
             personDTO.setLastName(p.getLastName());
             personDTO.setAddress(p.getAddress());
@@ -38,11 +40,15 @@ public class MapperService {
         }
         return res;
     }
+
     public List<PersonGeneralDto> getPersonsInfo(List<Person> data) throws IOException {
         List<PersonGeneralDto> res = new ArrayList<>();
-        for (Person p : data){
+        for (Person p : data) {
+            System.out.println(p);
+
             PersonGeneralDto personInfoDto = new PersonGeneralDto();
-            MedicalRecord medicalRecord = medicalRecordService.getAllMedicalRecordsByName(p.getFirstName());
+            MedicalRecord medicalRecord =
+                    medicalRecordService.getAllMedicalRecordsByName(p.getFirstName());
             personInfoDto.setFirstName(p.getFirstName());
             personInfoDto.setLastName(p.getLastName());
             personInfoDto.setAddress(p.getAddress());
@@ -51,6 +57,24 @@ public class MapperService {
             personInfoDto.setMedications(medicalRecord.getMedications());
             personInfoDto.setAllergies(medicalRecord.getAllergies());
             res.add(personInfoDto);
+        }
+        return res;
+    }
+
+    public List<PersonForFloodDTO> getPersonsInfoForFlood(List<Person> data)
+            throws IOException {
+        List<PersonForFloodDTO> res = new ArrayList<>();
+        for (Person p : data) {
+            PersonForFloodDTO personForFloodDTO = new PersonForFloodDTO();
+            MedicalRecord medicalRecord =
+                    medicalRecordService.getAllMedicalRecordsByName(p.getFirstName());
+            personForFloodDTO.setFirstName(p.getFirstName());
+            personForFloodDTO.setLastName(p.getLastName());
+            personForFloodDTO.setAge(
+                    CalculateAge.calculateAge(medicalRecord.getBirthdate()));
+            personForFloodDTO.setMedications(medicalRecord.getMedications());
+            personForFloodDTO.setAllergies(medicalRecord.getAllergies());
+            res.add(personForFloodDTO);
         }
         return res;
     }

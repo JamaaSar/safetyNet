@@ -1,19 +1,23 @@
 package com.example.safetyNet.dto;
 
-import com.example.safetyNet.model.IPerson;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import com.example.safetyNet.model.CommonInfoPerson;
+import jakarta.validation.constraints.NotEmpty;
 
-import java.util.List;
 
-@Getter
-@Setter
-@AllArgsConstructor
-@NoArgsConstructor
-public class Child extends IPerson {
+public class Child extends CommonInfoPerson {
+
+
+    public Child() {
+    }
 
     private int age;
 
+
+    public int getAge() {
+        return age;
+    }
+
+    public void setAge(int age) {
+        this.age = age;
+    }
 }

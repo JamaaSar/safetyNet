@@ -1,21 +1,29 @@
 package com.example.safetyNet.dto;
 
 import com.example.safetyNet.model.Person;
-import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
-import lombok.Getter;
-import lombok.Setter;
 
 import java.util.List;
 
-@Getter
-@Setter
-@AllArgsConstructor
-@NoArgsConstructor
-public class ChildAlertDto  {
+public class ChildAlertDto {
+    public ChildAlertDto() {
+    }
 
     private List<Child> childList;
     private List<Person> adultList;
 
+    public List<Child> getChildList() {
+        return childList;
+    }
 
+    public void setChildList(List<Child> childList) {
+        this.childList = childList;
+    }
+
+    public List<Person> getAdultList() {
+        return adultList;
+    }
+
+    public void setAdultList(List<Person> adultList) {
+        this.adultList = adultList;
+    }
 }

@@ -1,27 +1,29 @@
 package com.example.safetyNet.repository;
 
 import com.example.safetyNet.model.Person;
-import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
-
-@Repository
-public class PersonRepository  {
+public interface PersonRepository {
 
 
-    private List<Person> personsList;
+    List<Person> getPersonsList();
 
-    public List<Person> getPersonsList() {
-        return personsList;
-    }
+    void setPersonsList(List<Person> personsList);
 
-    public void setPersonsList(List<Person> personsList) {
-        this.personsList = personsList;
-    }
+    List<Person> getPersonByAddress(String address);
+
+    Person getPersonByFirstnameLastName(String firstname, String lastname);
 
 
+    List<Person> ajouter(Person person);
 
+    List<Person> remove(Person person);
+
+    List<Person> getPersonByCity(String city);
+
+    List<Person> getPersonsByFirstnameLastName(String firstname,
+                                               String lastname);
 
 
 }

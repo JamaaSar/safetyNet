@@ -9,7 +9,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.io.IOException;
 import java.util.List;
 
 @RestController
@@ -20,20 +19,26 @@ public class PersonController {
     PersonService personService;
 
     @PostMapping
-    public ResponseEntity<Person> add(@Valid @RequestBody Person person) throws IOException {
-        return ResponseEntity.status(HttpStatus.CREATED).body(personService.add(person));
+    public ResponseEntity<List<Person>> add(@Valid @RequestBody Person person) {
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(personService.ajouter(person));
     }
 
     @PutMapping
-    public ResponseEntity<Person> update(@RequestParam(name="firstname", required = true) String firstName,
-                                         @RequestParam(name="lastname", required = true) String lastName, @RequestBody UpdatePersonDTO updatePersonDTO) throws IOException {
-        return ResponseEntity.status(HttpStatus.OK).body(personService.update(firstName, lastName, updatePersonDTO));
+    public ResponseEntity<Person> update(
+            @RequestParam(name = "firstname", required = true) String firstName,
+            @RequestParam(name = "lastname", required = true) String lastName,
+            @RequestBody UpdatePersonDTO updatePersonDTO) {
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(personService.update(firstName, lastName, updatePersonDTO));
     }
 
     @DeleteMapping
-    public ResponseEntity<List<Person>> delete(@RequestParam(name="firstname", required = true) String firstName,
-                       @RequestParam(name="lastname", required = true) String lastName) throws IOException {
-        return ResponseEntity.status(HttpStatus.NO_CONTENT).body(personService.delete(firstName, lastName));
+    public ResponseEntity<List<Person>> delete(
+            @RequestParam(name = "firstname", required = true) String firstName,
+            @RequestParam(name = "lastname", required = true) String lastName) {
+        return ResponseEntity.status(HttpStatus.NO_CONTENT)
+                .body(personService.delete(firstName, lastName));
     }
 
 

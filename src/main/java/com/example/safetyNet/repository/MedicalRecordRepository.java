@@ -1,41 +1,20 @@
 package com.example.safetyNet.repository;
 
 import com.example.safetyNet.model.MedicalRecord;
-import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
-@Repository
-public class MedicalRecordRepository {
 
-    private List<MedicalRecord> medicalRecordsList;
-    
-    private List<MedicalRecord> medicalRecordsListByName;
+public interface MedicalRecordRepository {
 
-    public List<MedicalRecord> getMedicalRecordsList() {
-        return medicalRecordsList;
-    }
+    List<MedicalRecord> getMedicalRecordsList();
 
-    public void setMedicalRecordsList(List<MedicalRecord> medicalRecordsList) {
-        this.medicalRecordsList = medicalRecordsList;
-    }
+    void setMedicalRecordsList(List<MedicalRecord> medicalRecordsList);
 
-    public MedicalRecord getMedicalRecordsListByName(String name) {
-        return medicalRecordsList.stream().filter(medicalRecord -> (medicalRecord.getFirstName().toLowerCase()).equals(name.toLowerCase())).findFirst().get();
-    }
+    MedicalRecord getMedicalRecordsByFirstAndLastName(String firstName,
+                                                      String lastName);
 
-    public void setMedicalRecordsListByName(List<MedicalRecord> medicalRecordsListByName ) {
-        this.medicalRecordsListByName = medicalRecordsListByName;
-    }
+    List<MedicalRecord> ajouter(MedicalRecord medicalRecord);
 
-    public void add(MedicalRecord medicalRecord ) {
-         medicalRecordsList.add(medicalRecord);
-    }
-    public void remove(MedicalRecord medicalRecord ) {
-        medicalRecordsList.remove(medicalRecord);
-    }
-
-
-
-
+    List<MedicalRecord> remove(MedicalRecord medicalRecord);
 }
