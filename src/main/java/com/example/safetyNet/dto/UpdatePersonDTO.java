@@ -1,25 +1,14 @@
-package com.example.safetyNet.model;
+package com.example.safetyNet.dto;
 
 
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotEmpty;
-
-
-public class Person extends CommonInfoPerson {
-    @NotEmpty
+public class UpdatePersonDTO {
     private String address;
-    @NotEmpty
-    private String city;
-    @NotEmpty
-    private String zip;
-    @NotEmpty
-    private String phone;
-    @NotEmpty
-    @Email
     private String email;
+    private String city;
+    private String zip;
+    private String phone;
 
-    public Person() {
-
+    public UpdatePersonDTO() {
     }
 
     public String getAddress() {
@@ -28,6 +17,14 @@ public class Person extends CommonInfoPerson {
 
     public void setAddress(String address) {
         this.address = address;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public String getCity() {
@@ -53,12 +50,5 @@ public class Person extends CommonInfoPerson {
     public void setPhone(String phone) {
         this.phone = phone;
     }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
 }
+
