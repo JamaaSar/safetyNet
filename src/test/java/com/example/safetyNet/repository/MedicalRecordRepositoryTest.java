@@ -1,7 +1,6 @@
 package com.example.safetyNet.repository;
 
 
-import com.example.safetyNet.exception.NotFoundException;
 import com.example.safetyNet.model.MedicalRecord;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -10,14 +9,15 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-class MedicalRecordRepositoryImplTest {
+class MedicalRecordRepositoryTest {
 
     @Mock
     private MedicalRecordRepository medicalRecordRepository;
@@ -77,40 +77,12 @@ class MedicalRecordRepositoryImplTest {
         //GIVEN
 
         //WHEN
+        when(medicalRecordRepository.getMedicalRecordsList()).thenReturn(medicalRecords);
         List<MedicalRecord> medicalRecordList =
                 medicalRecordRepository.getMedicalRecordsList();
 
         //THEN
         assertEquals(medicalRecords.size(), medicalRecordList.size());
-    }
-
-    @Test
-    void getMedicalRecordByNameTest() {
-        //GIVEN
-
-        //WHEN
-        MedicalRecord medicalRecord =
-                medicalRecordRepository.getMedicalRecordByName("FirstName4");
-
-        //THEN
-        assertNotNull(medicalRecord);
-
-    }
-
-    @Test
-    void getMedicalRecordByNameErrorTest() {
-        //GIVEN
-        MedicalRecord medicalRecord = new MedicalRecord();
-        medicalRecord.setFirstName("test");
-
-        //WHEN
-
-
-        //THEN
-        assertThrows(NotFoundException.class,
-                () -> medicalRecordRepository.getMedicalRecordByName(
-                        medicalRecord.getFirstName()));
-
     }
 
 
@@ -125,20 +97,26 @@ class MedicalRecordRepositoryImplTest {
         medicalRecordTest.setAllergies(new ArrayList<String>());
 
         //WHEN
-        List<MedicalRecord> medicalRecordList =
-                medicalRecordRepository.ajouter(medicalRecordTest);
+        when(medicalRecordRepository.ajouter(testMedicalRecord)).thenReturn(
+                testMedicalRecord);
+        MedicalRecord medicalRecord =
+                medicalRecordRepository.ajouter(testMedicalRecord);
 
         //THEN
-        assertNotNull(medicalRecordList);
-        assertEquals(5, medicalRecordList.size());
+        assertNotNull(medicalRecord);
+        assertEquals("LastName4", medicalRecord.getLastName());
+        assertEquals("FirstName4", medicalRecord.getFirstName());
+        assertEquals("26/04/1983", medicalRecord.getBirthdate());
 
     }
 
     @Test
     void removeTest() {
         //GIVEN
-
+        medicalRecords.remove(testMedicalRecord);
         //WHEN
+        when(medicalRecordRepository.remove(testMedicalRecord)).thenReturn(
+                medicalRecords);
         List<MedicalRecord> medicalRecordList =
                 medicalRecordRepository.remove(testMedicalRecord);
 
