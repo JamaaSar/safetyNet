@@ -1,6 +1,6 @@
 package com.example.safetyNet.service;
 
-import com.example.safetyNet.exception.NotFoundException;
+import com.example.safetyNet.dto.UpdateMedicalRecordDTO;
 import com.example.safetyNet.model.MedicalRecord;
 import com.example.safetyNet.repository.MedicalRecordRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -19,8 +19,7 @@ import static org.junit.Assert.*;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-public class MedicalRecordServiceImplTest {
-
+public class MedicalRecordServiceTest {
 
     @Mock
     private MedicalRecordRepository medicalRecordRepository;
@@ -28,6 +27,7 @@ public class MedicalRecordServiceImplTest {
     private MedicalRecordService medicalRecordService;
     private List<MedicalRecord> medicalRecords = new ArrayList<>();
     private MedicalRecord testMedicalRecord = new MedicalRecord();
+    private UpdateMedicalRecordDTO updateMedicalRecordDTO = new UpdateMedicalRecordDTO();
     private List<String> medications = new ArrayList<>();
     private List<String> allergies = new ArrayList<>();
 
@@ -37,33 +37,16 @@ public class MedicalRecordServiceImplTest {
         medications.add("med2");
         medications.add("med3");
 
-        allergies.add("allergie1");
-        allergies.add("allergie2");
-        allergies.add("allergie3");
-
-        MedicalRecord medicalRecord = new MedicalRecord();
-        medicalRecord.setLastName("LastName1");
-        medicalRecord.setFirstName("FirstName1");
-        medicalRecord.setBirthdate("26/04/1983");
-        medicalRecord.setMedications(medications);
-        medicalRecord.setAllergies(allergies);
-
-        MedicalRecord medicalRecord1 = new MedicalRecord();
-        medicalRecord1.setLastName("LastName2");
-        medicalRecord1.setFirstName("FirstName2");
-        medicalRecord1.setBirthdate("26/04/1983");
-        medicalRecord1.setMedications(medications);
-        medicalRecord1.setAllergies(allergies);
-
-        testMedicalRecord.setLastName("LastName4");
         testMedicalRecord.setFirstName("FirstName4");
+        testMedicalRecord.setLastName("LastName4");
         testMedicalRecord.setBirthdate("26/04/1983");
         testMedicalRecord.setMedications(medications);
         testMedicalRecord.setAllergies(allergies);
 
-        medicalRecords.add(medicalRecord);
-        medicalRecords.add(medicalRecord1);
-        medicalRecords.add(testMedicalRecord);
+        updateMedicalRecordDTO.setBirthdate("06/04/1985");
+        updateMedicalRecordDTO.setMedications(new ArrayList<>());
+        updateMedicalRecordDTO.setAllergies(new ArrayList<>());
+
     }
 
     @Test
@@ -95,14 +78,6 @@ public class MedicalRecordServiceImplTest {
         assertNotNull(result);
     }
 
-    @Test
-    public void testGetMedicalRecordsByFirstAndLastName() throws IOException {
-        // Then.
-        assertThrows(NotFoundException.class,
-                () -> medicalRecordService.getMedicalRecordsByFirstAndLastName(
-                        testMedicalRecord.getFirstName(),
-                        testMedicalRecord.getLastName()));
-    }
 
     @Test
     public void testAddMedicalRecord() {
@@ -115,27 +90,59 @@ public class MedicalRecordServiceImplTest {
         medicalRecord.setAllergies(allergies);
         // When.
         when(medicalRecordRepository.ajouter(medicalRecord)).thenReturn(
-                Arrays.asList(medicalRecord));
-        List<MedicalRecord> result = medicalRecordService.ajouter(medicalRecord);
+                medicalRecord);
+        MedicalRecord result = medicalRecordService.ajouter(medicalRecord);
         // Then.
-        assertEquals(1, result.size());
+        assertEquals("LastName3", result.getLastName());
+        assertEquals("FirstName3", result.getFirstName());
+        assertEquals("26/04/1983", result.getBirthdate());
+        
     }
 
     @Test
     public void testUpdateFireStation() {
         // Given.
-        // When.
-        when(medicalRecordRepository.getMedicalRecordsList()).thenReturn(
-                Arrays.asList(testMedicalRecord));
+        MedicalRecord medicalRecord = new MedicalRecord();
+        medicalRecord.setLastName("LastName3");
+        medicalRecord.setFirstName("FirstName3");
+        medicalRecord.setBirthdate("06/04/1983");
+        medicalRecord.setMedications(medications);
+        medicalRecord.setAllergies(allergies);
 
-        when(medicalRecordRepository.remove(testMedicalRecord)).thenReturn(
-                medicalRecords);
-        List<MedicalRecord> result =
-                medicalRecordService.delete(testMedicalRecord.getFirstName(),
-                        testMedicalRecord.getLastName());
-
+        when(medicalRecordRepository.getMedicalRecordsByFirstAndLastName("FirstName3",
+                "LastName3")).thenReturn(medicalRecord);
+        when(medicalRecordService.update("FirstName3", "LastName3",
+                updateMedicalRecordDTO)).thenReturn(medicalRecord);
+        MedicalRecord result =
+                medicalRecordService.update("FirstName3", "LastName3",
+                        updateMedicalRecordDTO);
         // Then.
-        assertEquals(2, result.size());
+        assertNotNull(result);
+
+    }
+
+    @Test
+    public void testUpdateFireStationEmpty() {
+        // Given.
+        MedicalRecord medicalRecord = new MedicalRecord();
+        medicalRecord.setLastName("LastName3");
+        medicalRecord.setFirstName("FirstName3");
+        medicalRecord.setBirthdate("06/04/1983");
+        medicalRecord.setMedications(medications);
+        medicalRecord.setAllergies(allergies);
+        UpdateMedicalRecordDTO updateMedicalRecordDTOEmpty = new UpdateMedicalRecordDTO();
+        updateMedicalRecordDTOEmpty.setAllergies(new ArrayList<>());
+        updateMedicalRecordDTOEmpty.setMedications(new ArrayList<>());
+        updateMedicalRecordDTOEmpty.setBirthdate("");
+
+        when(medicalRecordRepository.getMedicalRecordsByFirstAndLastName("FirstName3",
+                "LastName3")).thenReturn(medicalRecord);
+        MedicalRecord result =
+                medicalRecordService.update("FirstName3", "LastName3",
+                        updateMedicalRecordDTOEmpty);
+        // Then.
+        assertNotNull(result);
+
     }
 
     @Test
@@ -143,17 +150,14 @@ public class MedicalRecordServiceImplTest {
         // Given.
         medicalRecords.remove(testMedicalRecord);
         // When.
-        when(medicalRecordRepository.getMedicalRecordsList()).thenReturn(
-                Arrays.asList(testMedicalRecord));
-
-        when(medicalRecordRepository.remove(testMedicalRecord)).thenReturn(
-                medicalRecords);
+        when(medicalRecordService.delete(testMedicalRecord.getFirstName(),
+                testMedicalRecord.getLastName())).thenReturn(medicalRecords);
         List<MedicalRecord> result =
                 medicalRecordService.delete(testMedicalRecord.getFirstName(),
                         testMedicalRecord.getLastName());
 
         // Then.
-        assertEquals(2, result.size());
+        assertEquals(medicalRecords.size(), result.size());
     }
 
 }

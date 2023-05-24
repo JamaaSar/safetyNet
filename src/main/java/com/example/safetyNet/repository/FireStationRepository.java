@@ -16,7 +16,7 @@ public interface FireStationRepository {
 
     FireStation getFireStationByAddress(String address);
 
-    List<FireStation> ajouter(FireStation fireStation);
+    FireStation ajouter(FireStation fireStation);
 
     List<FireStation> remove(FireStation fireStation);
 

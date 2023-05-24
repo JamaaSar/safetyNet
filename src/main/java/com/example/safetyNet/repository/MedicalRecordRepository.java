@@ -14,7 +14,7 @@ public interface MedicalRecordRepository {
     MedicalRecord getMedicalRecordsByFirstAndLastName(String firstName,
                                                       String lastName);
 
-    List<MedicalRecord> ajouter(MedicalRecord medicalRecord);
+    MedicalRecord ajouter(MedicalRecord medicalRecord);
 
     List<MedicalRecord> remove(MedicalRecord medicalRecord);
 }

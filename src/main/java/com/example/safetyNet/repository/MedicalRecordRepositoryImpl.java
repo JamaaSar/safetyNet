@@ -37,9 +37,9 @@ public class MedicalRecordRepositoryImpl
     }
 
     @Override
-    public List<MedicalRecord> ajouter(MedicalRecord medicalRecord) {
+    public MedicalRecord ajouter(MedicalRecord medicalRecord) {
         medicalRecordsList.add(medicalRecord);
-        return medicalRecordsList;
+        return medicalRecord;
     }
 
     @Override

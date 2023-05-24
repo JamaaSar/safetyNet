@@ -1,14 +1,14 @@
 package com.example.safetyNet.service;
 
 
+import com.example.safetyNet.dto.FloodDTO;
+import com.example.safetyNet.dto.PersonForFloodDTO;
 import com.example.safetyNet.dto.PersonGeneralDto;
 import com.example.safetyNet.exception.NotFoundException;
 import com.example.safetyNet.model.FireStation;
 import com.example.safetyNet.model.MedicalRecord;
 import com.example.safetyNet.model.Person;
 import com.example.safetyNet.repository.FireStationRepository;
-import com.example.safetyNet.repository.MedicalRecordRepository;
-import com.example.safetyNet.repository.PersonRepository;
 import org.junit.jupiter.api.BeforeEach;
 
 import org.junit.jupiter.api.Test;
@@ -21,26 +21,19 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.io.IOException;
 import java.util.*;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertThrows;
+import static org.junit.Assert.*;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-public class FireSationServiceTest {
+public class FireStationServiceTest {
     @InjectMocks
     private FireStationService fireStationService;
     @Mock
     private FireStationRepository fireStationRepository;
     @Mock
-    private PersonRepository personRepository;
-    @Mock
-    private MedicalRecordRepository medicalRecordRepository;
-    @Mock
     private MapperService mapperService;
     @Mock
     private PersonService personService;
-    @Mock
-    private MedicalRecordService medicalRecordService;
     private List<FireStation> fireStations = new ArrayList<>();
     private List<Person> persons = new ArrayList<>();
     private FireStation testFireStation = new FireStation();
@@ -131,10 +124,10 @@ public class FireSationServiceTest {
         fireStation.setAddress("1 Test");
         //WHEN
         when(fireStationRepository.ajouter(fireStation)).thenReturn(
-                Arrays.asList(fireStation));
-        List<FireStation> result = fireStationService.ajouter(fireStation);
+                fireStation);
+        FireStation result = fireStationService.ajouter(fireStation);
         //THEN
-        assertEquals(1, result.size());
+        assertEquals("1", result.getStation());
     }
 
     @Test
@@ -160,7 +153,7 @@ public class FireSationServiceTest {
         PersonGeneralDto personInfoDto = new PersonGeneralDto();
 
         //WHEN
-        when(personService.getPersonByAddresse("2 Test Address")).thenReturn(persons);
+        when(personService.getPersonByAddress("2 Test Address")).thenReturn(persons);
         when(mapperService.getPersonsInfo(persons)).thenReturn(
                 Arrays.asList(personInfoDto));
 
@@ -169,13 +162,12 @@ public class FireSationServiceTest {
         assertEquals(1, result.size());
     }
 
+
     @Test
     void testGetFireReturnNull() throws IOException {
         // GIVEN
-        PersonGeneralDto personInfoDto = new PersonGeneralDto();
-
         //WHEN
-        when(personService.getPersonByAddresse("33 Test Address")).thenReturn(persons);
+        when(personService.getPersonByAddress("33 Test Address")).thenReturn(persons);
         when(mapperService.getPersonsInfo(persons)).thenReturn(new ArrayList<>());
 
         //THEN
@@ -188,19 +180,119 @@ public class FireSationServiceTest {
     @Test
     void testGetFireStation() throws IOException {
         // GIVEN
-        List<List<String>> list = new ArrayList();
+        List<Set<String>> list = new ArrayList();
         //WHEN
         when(fireStationRepository.getFireStationByStation("1")).thenReturn(fireStations);
         when(personService.getAllPerson()).thenReturn(persons);
-        when(fireStationService.getFireStaion("1")).thenReturn(
+        when(fireStationService.getFireStation("1")).thenReturn(
                 list);
 
 
         //THEN
-        List<List<String>> result = fireStationService.getFireStaion("1");
+        List<Set<String>> result = fireStationService.getFireStation("1");
         assertEquals(4, result.size());
 
-        // assertThrows(NotFoundException.class,() -> fireStationService.getFire("33 Test Address"));
+    }
+
+    @Test
+    void testGetFlood() throws IOException {
+        // GIVEN
+
+        List<String> stations = new ArrayList<>();
+        stations.add("1");
+        List<FloodDTO> floodDTOS = new ArrayList<>();
+
+        PersonForFloodDTO personForFloodDTO = new PersonForFloodDTO();
+
+        personForFloodDTO.setFirstName("testPersonFirstName");
+        personForFloodDTO.setLastName("testPersonLastName");
+        personForFloodDTO.setAge(40);
+        personForFloodDTO.setPhone("99999999");
+        personForFloodDTO.setMedications(new ArrayList<>());
+        personForFloodDTO.setAllergies(new ArrayList<>());
+
+        //WHEN
+        when(fireStationRepository.getFireStationByStation("1")).thenReturn(
+                Arrays.asList(testFireStation));
+        when(personService.getPersonByAddress(testFireStation.getAddress())).thenReturn(
+                persons);
+        when(mapperService.getPersonsInfoForFlood(persons)).thenReturn(
+                Arrays.asList(personForFloodDTO));
+
+        when(fireStationService.getFlood(stations)).thenReturn(floodDTOS);
+
+
+        //THEN
+        List<FloodDTO> result = fireStationService.getFlood(stations);
+        assertEquals(1, result.size());
+
+    }
+
+    @Test
+    void testGetAFireStationById() throws IOException {
+        // GIVEN
+        List<Map<String, List<?>>> stations = new ArrayList();
+        PersonGeneralDto personGeneralDto = new PersonGeneralDto();
+        //WHEN
+        when(fireStationRepository.getFireStationByStation("1")).thenReturn(
+                Arrays.asList(testFireStation));
+        when(personService.getPersonByAddress(testFireStation.getAddress())).thenReturn(
+                persons);
+        when(mapperService.getPersonsInfo(persons)).thenReturn(
+                Arrays.asList(personGeneralDto));
+        when(fireStationService.getFireStationById("1")).thenReturn(
+                stations);
+
+        //THEN
+        List<Map<String, List<?>>> result = fireStationService.getFireStationById("1");
+        assertEquals(1, result.size());
+    }
+
+    @Test
+    void testGetAFireStationByIdError() throws IOException {
+        // GIVEN
+        List<FireStation> emptyList = new ArrayList<>();
+        //WHEN
+        when(fireStationRepository.getFireStationByStation("1")).thenReturn(
+                emptyList);
+
+        //THEN
+        assertThrows(NotFoundException.class,
+                () -> fireStationService.getFireStationById("1"));
+    }
+
+    @Test
+    void testUpdateFireStation() throws IOException {
+        // GIVEN
+        FireStation fireStation = new FireStation();
+        fireStation.setAddress("update address");
+        fireStation.setStation("8");
+        // WHEN
+        when(fireStationRepository.getFireStationByAddress("0 TestStation")).thenReturn(
+                testFireStation);
+        when(fireStationService.update("0 TestStation", "7")).thenReturn(testFireStation);
+
+        // THEN
+        FireStation result =
+                fireStationService.update("0 TestStation", "7");
+        assertNotNull(result);
+
+    }
+
+    @Test
+    void testUpdateFireStationEmpty() throws IOException {
+        // GIVEN
+        FireStation fireStation = new FireStation();
+        // fireStation.setAddress("update address");
+        //fireStation.setStation("8");
+        // WHEN
+        when(fireStationRepository.getFireStationByAddress("0 TestStation")).thenReturn(
+                fireStation);
+
+        // THEN
+        FireStation result =
+                fireStationService.update("0 TestStation", "");
+        assertNotNull(result);
 
     }
 

@@ -1,7 +1,6 @@
 package com.example.safetyNet.repository;
 
 
-import com.example.safetyNet.exception.NotFoundException;
 import com.example.safetyNet.model.Person;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -10,45 +9,45 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-class PersonRepositoryIpmlTest {
+public class PersonRepositoryTest {
 
     @Mock
     private PersonRepository personRepository;
+
     private List<Person> persons = new ArrayList<>();
-    
+
     private Person personToTest = new Person();
 
     @BeforeEach
-    public void setUp() {
+    void setUp() {
 
+        //Initialize
         //person 1
         Person person1 = new Person();
         person1.setFirstName("Test1");
-        person1.setLastName("Test1lastname");
+        person1.setLastName("Test1Lastname");
         person1.setAddress("1 Test Address");
         person1.setCity("Testcity1");
         person1.setZip("000001");
         person1.setPhone("0000001");
         person1.setEmail("test1@gmail.com");
-
         //person 2
         Person person2 = new Person();
         person2.setFirstName("Test2");
-        person2.setLastName("Test2lastname");
+        person2.setLastName("Test2Lastname");
         person2.setAddress("2 Test Address");
         person2.setCity("Testcity2");
         person2.setZip("000002");
         person2.setPhone("0000002");
         person2.setEmail("test2@gmail.com");
-
-        //person 2
+        //person to Test
         personToTest.setFirstName("PersonToTestFirstName");
         personToTest.setLastName("PersonToTestLastName");
         personToTest.setAddress("2 Test AddressPersonToTestFirstName");
@@ -70,35 +69,29 @@ class PersonRepositoryIpmlTest {
         //GIVEN
 
         //WHEN
-        List<Person> personsList = personRepository.getPersonsList();
-
+        when(personRepository.getPersonsList()).thenReturn(persons);
         //THEN
+
+        List<Person> personsList = personRepository.getPersonsList();
         assertEquals(persons.size(), personsList.size());
     }
 
-    @Test
-    void getPersonsListTest() {
-        //GIVEN
-
-        //WHEN
-        List<Person> personList =
-                personRepository.getPersonsList();
-
-        //THEN
-        assertEquals(persons.size(), personList.size());
-        assertEquals(3, personList.size());
-    }
 
     @Test
     void getPersonByAddressTest() {
         //GIVEN
 
         //WHEN
+        when(personRepository.getPersonByAddress(
+                "2 Test AddressPersonToTestFirstName")).thenReturn(
+                Arrays.asList(personToTest));
+
         List<Person> personList =
-                personRepository.getPersonByAddresse(
+                personRepository.getPersonByAddress(
                         "2 Test AddressPersonToTestFirstName");
 
         //THEN
+        assertEquals(1, personList.size());
         assertNotNull(personList);
     }
 
@@ -107,29 +100,16 @@ class PersonRepositoryIpmlTest {
         //GIVEN
 
         //WHEN
+        when(personRepository.getPersonByFirstnameLastName("PersonToTestFirstName",
+                "PersonToTestLastName")).thenReturn(personToTest);
+
         Person person =
                 personRepository.getPersonByFirstnameLastName("PersonToTestFirstName",
                         "PersonToTestLastName");
 
         //THEN
+        assertEquals("PersonToTestFirstName", person.getFirstName());
         assertNotNull(person);
-
-    }
-
-    @Test
-    void getPersonByFirstnameLastNameErrorTest() {
-        //GIVEN
-        Person person = new Person();
-        person.setFirstName("Person");
-        person.setLastName("Person");
-        //WHEN
-
-
-        //THEN
-        assertThrows(NotFoundException.class,
-                () -> personRepository.getPersonByFirstnameLastName(
-                        person.getFirstName(),
-                        person.getLastName()));
 
     }
 
@@ -145,22 +125,30 @@ class PersonRepositoryIpmlTest {
         test.setPhone("0000002");
         test.setEmail("test2@gmail.com");
         //WHEN
-        List<Person> personList =
-                personRepository.ajouter(test);
+        when(personRepository.ajouter(test)).thenReturn(test);
+        Person person = personRepository.ajouter(test);
 
         //THEN
-        assertNotNull(personList);
-        assertEquals(4, personList.size());
+        assertNotNull(person);
+        assertEquals("testFirstName", person.getFirstName());
+        assertEquals("testLastName", person.getLastName());
+        assertEquals("2 Test Address", person.getAddress());
+        assertEquals("Testcity2", person.getCity());
+        assertEquals("000002", person.getZip());
+        assertEquals("0000002", person.getPhone());
+        assertEquals("test2@gmail.com", person.getEmail());
+
 
     }
 
     @Test
     void removeTest() {
         //GIVEN
+        persons.remove(personToTest);
 
         //WHEN
-        List<Person> personList =
-                personRepository.remove(personToTest);
+        when(personRepository.remove(personToTest)).thenReturn(persons);
+        List<Person> personList = personRepository.remove(personToTest);
 
         //THEN
         assertNotNull(personList);

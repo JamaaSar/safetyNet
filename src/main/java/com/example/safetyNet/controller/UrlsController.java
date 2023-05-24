@@ -5,6 +5,8 @@ import com.example.safetyNet.dto.FloodDTO;
 import com.example.safetyNet.dto.PersonGeneralDto;
 import com.example.safetyNet.service.FireStationService;
 import com.example.safetyNet.service.PersonService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,18 +17,23 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Set;
 
 @RestController
 @RequestMapping("/")
 public class UrlsController {
+
+    private static final Logger logger = LoggerFactory.getLogger(UrlsController.class);
+
     @Autowired
     PersonService personService;
     @Autowired
     FireStationService fireStationService;
 
     @GetMapping("/communityEmail")
-    public ResponseEntity<List<String>> getCommunityEmail(
+    public ResponseEntity<Set<String>> getCommunityEmail(
             @RequestParam(name = "city") String city) {
+        logger.info("getCommunityEmail");
         return new ResponseEntity<>(personService.getAllEmails(city), HttpStatus.OK);
     }
 
@@ -34,6 +41,7 @@ public class UrlsController {
     public ResponseEntity<List<PersonGeneralDto>> getPersonInfo(
             @RequestParam(name = "firstName") String firstName,
             @RequestParam(name = "lastName") String lastName) throws IOException {
+        logger.info("getPersonInfo");
         return new ResponseEntity<>(personService.getPersonInfo(firstName, lastName),
                 HttpStatus.OK);
     }
@@ -41,6 +49,7 @@ public class UrlsController {
     @GetMapping("/childAlert")
     public ResponseEntity<List<ChildAlertDto>> getChild(
             @RequestParam(name = "address") String address) throws IOException {
+        logger.info("getChild");
         return new ResponseEntity<>(personService.getChildAlert(address),
                 HttpStatus.OK);
     }
@@ -49,14 +58,16 @@ public class UrlsController {
     public ResponseEntity getFireStationByStationNumber(
             @RequestParam(name = "stationNumber") String stationNumber)
             throws IOException {
+        logger.info("getFireStationByStationNumber");
         return new ResponseEntity<>(
                 fireStationService.getFireStationById(stationNumber),
                 HttpStatus.OK);
     }
 
     @GetMapping("/phoneAlert")
-    public ResponseEntity<List<List<String>>> getFireStation(
+    public ResponseEntity getFireStation(
             @RequestParam(name = "firestation") String fireStation) throws IOException {
+        logger.info("getFireStation");
         return new ResponseEntity<>(fireStationService.getFireStation(fireStation),
                 HttpStatus.OK);
     }
@@ -64,6 +75,7 @@ public class UrlsController {
     @GetMapping("/fire")
     public ResponseEntity<List<PersonGeneralDto>> getFire(
             @RequestParam(name = "address") String address) throws IOException {
+        logger.info("getFire");
         return new ResponseEntity<>(fireStationService.getFire(address),
                 HttpStatus.OK);
     }
@@ -71,6 +83,7 @@ public class UrlsController {
     @GetMapping("/flood/stations")
     public ResponseEntity<List<FloodDTO>> getFlood(
             @RequestParam(name = "stations") List<String> stations) throws IOException {
+        logger.info("getFlood");
         return new ResponseEntity<>(fireStationService.getFlood(stations),
                 HttpStatus.OK);
     }
