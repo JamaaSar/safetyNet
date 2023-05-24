@@ -1,5 +1,6 @@
 package com.example.safetyNet.repository;
 
+import com.example.safetyNet.exception.NotFoundException;
 import com.example.safetyNet.model.Person;
 import org.springframework.stereotype.Repository;
 
@@ -43,7 +44,11 @@ public class PersonRepositoryIpml
     public Person getPersonByFirstnameLastName(String firstname, String lastname) {
         return personsList.stream()
                 .filter(person -> person.getLastName().equals(lastname) &&
-                        person.getFirstName().equals(firstname)).findFirst().get();
+                        person.getFirstName().equals(firstname)).findFirst()
+                .orElseThrow(() -> new NotFoundException(
+                        "Person with firstname '" + firstname + "' and lastname " +
+                                lastname +
+                                "' not found"));
     }
 
     @Override
@@ -56,9 +61,9 @@ public class PersonRepositoryIpml
     }
 
     @Override
-    public List<Person> ajouter(Person person) {
+    public Person ajouter(Person person) {
         personsList.add(person);
-        return personsList;
+        return person;
     }
 
     @Override

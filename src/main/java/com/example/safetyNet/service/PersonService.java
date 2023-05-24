@@ -4,6 +4,8 @@ import com.example.safetyNet.dto.*;
 import com.example.safetyNet.exception.NotFoundException;
 import com.example.safetyNet.model.Person;
 import com.example.safetyNet.repository.PersonRepository;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -12,6 +14,7 @@ import java.util.*;
 
 @Service
 public class PersonService {
+    private static final Logger logger = LogManager.getLogger(MedicalRecordService.class);
     @Autowired
     PersonRepository personRepository;
     @Autowired
@@ -25,21 +28,37 @@ public class PersonService {
         return personRepository.getPersonByAddress(param);
     }
 
-
-    public List<String> getAllEmails(String city) {
-        List<String> emails = new ArrayList<>();
+    /**
+     * Doit retourner les adresses mail de tous les habitants de la ville.
+     *
+     * @param city
+     * @return
+     */
+    public Set<String> getAllEmails(String city) {
+        Set<String> emails = new HashSet<>();
         List<Person> persons = personRepository.getPersonByCity(city);
 
         if (persons.isEmpty()) {
+            logger.error("Aucune email à été trouvé pour la city correspondant");
             throw new NotFoundException("No data found");
         } else {
             for (Person p : persons) {
                 emails.add(p.getEmail());
             }
         }
+        logger.info(
+                "Doit retourner les adresses mail de tous les habitants de la ville.");
         return emails;
     }
 
+    /**
+     * Doit retourner le nom, l'adresse, l'âge, l'adresse mail et les antécédents médicaux (médicaments, posologie, allergies) de chaque habitant.
+     *
+     * @param firstname
+     * @param lastname
+     * @return
+     * @throws IOException
+     */
     public List<PersonGeneralDto> getPersonInfo(String firstname, String lastname)
             throws IOException {
         List<Person> persons = personRepository.getPersonsByFirstnameLastName(firstname,
@@ -47,11 +66,21 @@ public class PersonService {
 
         List<PersonGeneralDto> res = mapperService.getPersonsInfo(persons);
         if (res.isEmpty()) {
+            logger.error("Aucune personne à été trouvé pour la personne correspondant");
             throw new NotFoundException("No data found");
         }
+        logger.info(
+                "Doit retourner le nom, l'adresse, l'âge, l'adresse mail et les antécédents médicaux (médicaments, posologie, allergies) de chaque habitant.");
         return res;
     }
 
+    /**
+     * Doit retourner une liste d'enfants (tout individu âgé de 18 ans ou moins) habitant à cette adresse.
+     *
+     * @param address
+     * @return
+     * @throws IOException
+     */
     public List<ChildAlertDto> getChildAlert(String address) throws IOException {
         List<Person> persons = personRepository.getPersonByAddress(address);
         List<ChildAlertDto> childAlertDtos = new ArrayList<>();
@@ -82,8 +111,11 @@ public class PersonService {
             childAlertDto.setChildList(listChildren);
             childAlertDtos.add(childAlertDto);
         } else {
+            logger.error("Aucune enfant à été trouvé pour l'adresse correspondant");
             throw new NotFoundException("No children found");
         }
+        logger.info(
+                "Doit retourner une liste d'enfants (tout individu âgé de 18 ans ou moins) habitant à cette adresse.");
 
         return childAlertDtos;
     }
@@ -110,7 +142,12 @@ public class PersonService {
         return personToUpdate;
     }
 
-    public List<Person> ajouter(Person person) {
+    public Person getPersonByFirstnameLastName(String firstname, String lastname) {
+        return personRepository.getPersonByFirstnameLastName(firstname, lastname);
+
+    }
+
+    public Person ajouter(Person person) {
         return personRepository.ajouter(person);
     }
 

@@ -16,7 +16,7 @@ public interface PersonRepository {
     Person getPersonByFirstnameLastName(String firstname, String lastname);
 
 
-    List<Person> ajouter(Person person);
+    Person ajouter(Person person);
 
     List<Person> remove(Person person);
 

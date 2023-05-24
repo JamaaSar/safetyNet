@@ -40,9 +40,9 @@ public class FireStationRepositoryImp
     }
 
     @Override
-    public List<FireStation> ajouter(FireStation fireStation) {
+    public FireStation ajouter(FireStation fireStation) {
         fireStationsList.add(fireStation);
-        return fireStationsList;
+        return fireStation;
     }
 
     @Override
