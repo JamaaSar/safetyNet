@@ -13,7 +13,7 @@ import java.util.List;
 
 @Service
 public class MedicalRecordService {
-    private static final Logger logger = LogManager.getLogger(MedicalRecordService.class);
+    private static final Logger logger = LogManager.getLogger("MedicalRecordService");
     @Autowired
     MedicalRecordRepository medicalRecordRepository;
 

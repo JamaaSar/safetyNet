@@ -5,8 +5,8 @@ import com.example.safetyNet.model.FireStation;
 import com.example.safetyNet.model.Person;
 import com.example.safetyNet.service.PersonService;
 import jakarta.validation.Valid;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,7 +19,7 @@ import java.util.List;
 public class PersonController {
 
     private static final Logger logger =
-            LoggerFactory.getLogger(PersonController.class);
+            LogManager.getLogger("PersonController");
     @Autowired
     PersonService personService;
 

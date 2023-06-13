@@ -14,7 +14,7 @@ import java.util.*;
 
 @Service
 public class PersonService {
-    private static final Logger logger = LogManager.getLogger(MedicalRecordService.class);
+    private static final Logger logger = LogManager.getLogger("PersonService");
     @Autowired
     PersonRepository personRepository;
     @Autowired
@@ -59,12 +59,12 @@ public class PersonService {
      * @return
      * @throws IOException
      */
-    public List<PersonGeneralDto> getPersonInfo(String firstname, String lastname)
+    public List<PersonGeneralDTO> getPersonInfo(String firstname, String lastname)
             throws IOException {
         List<Person> persons = personRepository.getPersonsByFirstnameLastName(firstname,
                 lastname);
 
-        List<PersonGeneralDto> res = mapperService.getPersonsInfo(persons);
+        List<PersonGeneralDTO> res = mapperService.getPersonsInfo(persons);
         if (res.isEmpty()) {
             logger.error("Aucune personne à été trouvé pour la personne correspondant");
             throw new NotFoundException("No data found");
@@ -81,17 +81,17 @@ public class PersonService {
      * @return
      * @throws IOException
      */
-    public List<ChildAlertDto> getChildAlert(String address) throws IOException {
+    public List<ChildAlertDTO> getChildAlert(String address) throws IOException {
         List<Person> persons = personRepository.getPersonByAddress(address);
-        List<ChildAlertDto> childAlertDtos = new ArrayList<>();
+        List<ChildAlertDTO> childAlertDtos = new ArrayList<>();
         List<Person> listAdults = new ArrayList<>();
-        List<Child> listChildren = new ArrayList<>();
-        ChildAlertDto childAlertDto = new ChildAlertDto();
+        List<ChildDTO> listChildren = new ArrayList<>();
+        ChildAlertDTO childAlertDto = new ChildAlertDTO();
         List<PersonDTO> personDTOList = mapperService.getAllInfoOfPerson(persons);
         if (!personDTOList.isEmpty()) {
             for (PersonDTO p : personDTOList) {
                 if (p.getAge() < 18) {
-                    Child child = new Child();
+                    ChildDTO child = new ChildDTO();
                     child.setFirstName(p.getFirstName());
                     child.setLastName(p.getLastName());
                     child.setAge(p.getAge());

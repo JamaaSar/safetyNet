@@ -4,7 +4,7 @@ import com.example.safetyNet.model.CommonInfoPerson;
 
 import java.util.List;
 
-public class PersonForFloodDTO extends CommonInfoPerson {
+public class PersonForFloodDTO extends CommonInfoPersonDTO {
     private String phone;
     private int age;
     private List<String> medications;

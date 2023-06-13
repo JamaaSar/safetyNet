@@ -1,7 +1,7 @@
 package com.example.safetyNet.service;
 
 import com.example.safetyNet.dto.FloodDTO;
-import com.example.safetyNet.dto.PersonGeneralDto;
+import com.example.safetyNet.dto.PersonGeneralDTO;
 import com.example.safetyNet.exception.NotFoundException;
 import com.example.safetyNet.model.FireStation;
 import com.example.safetyNet.model.Person;
@@ -18,7 +18,7 @@ import java.util.stream.Collectors;
 @Service
 public class FireStationService {
 
-    private static final Logger logger = LogManager.getLogger(FireStationService.class);
+    private static final Logger logger = LogManager.getLogger("FireStationService");
 
     @Autowired
     FireStationRepository fireStationRepository;
@@ -51,7 +51,7 @@ public class FireStationService {
             Map<String, List<?>> informationByStation = new TreeMap<>();
             List<Person> persons = personService.getPersonByAddress(f.getAddress());
             int adult = 0, child = 0;
-            for (PersonGeneralDto p : mapperService.getPersonsInfo(persons)) {
+            for (PersonGeneralDTO p : mapperService.getPersonsInfo(persons)) {
                 if (p.getAge() > 18) {
                     adult++;
                 } else {
@@ -102,9 +102,9 @@ public class FireStationService {
      * @return
      * @throws IOException
      */
-    public List<PersonGeneralDto> getFire(String param) throws IOException {
+    public List<PersonGeneralDTO> getFire(String param) throws IOException {
         List<Person> persons = personService.getPersonByAddress(param);
-        List<PersonGeneralDto> result = mapperService.getPersonsInfo(persons);
+        List<PersonGeneralDTO> result = mapperService.getPersonsInfo(persons);
         if (result.isEmpty()) {
             logger.error("Aucune personne à été trouvé pour l'adresse correspondant");
             throw new NotFoundException("No data found for address " + param);

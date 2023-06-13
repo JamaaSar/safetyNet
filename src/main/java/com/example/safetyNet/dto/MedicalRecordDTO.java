@@ -1,42 +1,27 @@
 package com.example.safetyNet.dto;
 
 import com.example.safetyNet.model.CommonInfoPerson;
+import jakarta.validation.constraints.NotEmpty;
 
 import java.util.List;
 
-public class PersonGeneralDto extends CommonInfoPerson {
-
-    private String address;
-    private int age;
-    private String email;
+public class MedicalRecordDTO extends CommonInfoPersonDTO {
+    @NotEmpty
+    private String birthdate;
+    @NotEmpty
     private List<String> medications;
+    @NotEmpty
     private List<String> allergies;
 
-    public PersonGeneralDto() {
+    public MedicalRecordDTO() {
     }
 
-    public String getAddress() {
-        return address;
+    public String getBirthdate() {
+        return birthdate;
     }
 
-    public void setAddress(String address) {
-        this.address = address;
-    }
-
-    public int getAge() {
-        return age;
-    }
-
-    public void setAge(int age) {
-        this.age = age;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
+    public void setBirthdate(String birthdate) {
+        this.birthdate = birthdate;
     }
 
     public List<String> getMedications() {
