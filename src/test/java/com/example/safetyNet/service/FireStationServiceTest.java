@@ -3,7 +3,7 @@ package com.example.safetyNet.service;
 
 import com.example.safetyNet.dto.FloodDTO;
 import com.example.safetyNet.dto.PersonForFloodDTO;
-import com.example.safetyNet.dto.PersonGeneralDto;
+import com.example.safetyNet.dto.PersonGeneralDTO;
 import com.example.safetyNet.exception.NotFoundException;
 import com.example.safetyNet.model.FireStation;
 import com.example.safetyNet.model.MedicalRecord;
@@ -150,7 +150,7 @@ public class FireStationServiceTest {
     @Test
     void testGetFire() throws IOException {
         // GIVEN
-        PersonGeneralDto personInfoDto = new PersonGeneralDto();
+        PersonGeneralDTO personInfoDto = new PersonGeneralDTO();
 
         //WHEN
         when(personService.getPersonByAddress("2 Test Address")).thenReturn(persons);
@@ -158,7 +158,7 @@ public class FireStationServiceTest {
                 Arrays.asList(personInfoDto));
 
         //THEN
-        List<PersonGeneralDto> result = fireStationService.getFire("2 Test Address");
+        List<PersonGeneralDTO> result = fireStationService.getFire("2 Test Address");
         assertEquals(1, result.size());
     }
 
@@ -232,7 +232,7 @@ public class FireStationServiceTest {
     void testGetAFireStationById() throws IOException {
         // GIVEN
         List<Map<String, List<?>>> stations = new ArrayList();
-        PersonGeneralDto personGeneralDto = new PersonGeneralDto();
+        PersonGeneralDTO personGeneralDto = new PersonGeneralDTO();
         //WHEN
         when(fireStationRepository.getFireStationByStation("1")).thenReturn(
                 Arrays.asList(testFireStation));

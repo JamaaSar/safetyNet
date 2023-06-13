@@ -1,7 +1,6 @@
 package com.example.safetyNet.integration;
 
 
-import com.example.safetyNet.dto.PersonGeneralDto;
 import com.example.safetyNet.model.Person;
 import com.example.safetyNet.service.FireStationService;
 import com.example.safetyNet.service.PersonService;
