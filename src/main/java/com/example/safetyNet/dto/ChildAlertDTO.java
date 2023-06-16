@@ -4,18 +4,18 @@ import com.example.safetyNet.model.Person;
 
 import java.util.List;
 
-public class ChildAlertDto {
-    public ChildAlertDto() {
+public class ChildAlertDTO {
+    public ChildAlertDTO() {
     }
 
-    private List<Child> childList;
+    private List<ChildDTO> childList;
     private List<Person> adultList;
 
-    public List<Child> getChildList() {
+    public List<ChildDTO> getChildList() {
         return childList;
     }
 
-    public void setChildList(List<Child> childList) {
+    public void setChildList(List<ChildDTO> childList) {
         this.childList = childList;
     }
 

@@ -1,22 +1,17 @@
 package com.example.safetyNet.dto;
 
-import com.example.safetyNet.model.CommonInfoPerson;
 
 import java.util.List;
 
-public class PersonDTO extends CommonInfoPersonDTO {
-
+public class PersonGeneralDTO extends CommonInfoPersonDTO {
 
     private String address;
     private int age;
     private String email;
-    private String city;
-    private String zip;
-    private String phone;
     private List<String> medications;
     private List<String> allergies;
 
-    public PersonDTO() {
+    public PersonGeneralDTO() {
     }
 
     public String getAddress() {
@@ -43,30 +38,6 @@ public class PersonDTO extends CommonInfoPersonDTO {
         this.email = email;
     }
 
-    public String getCity() {
-        return city;
-    }
-
-    public void setCity(String city) {
-        this.city = city;
-    }
-
-    public String getZip() {
-        return zip;
-    }
-
-    public void setZip(String zip) {
-        this.zip = zip;
-    }
-
-    public String getPhone() {
-        return phone;
-    }
-
-    public void setPhone(String phone) {
-        this.phone = phone;
-    }
-
     public List<String> getMedications() {
         return medications;
     }
@@ -83,4 +54,3 @@ public class PersonDTO extends CommonInfoPersonDTO {
         this.allergies = allergies;
     }
 }
-

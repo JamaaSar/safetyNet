@@ -1,17 +1,14 @@
 package com.example.safetyNet.service;
 
 
-import com.example.safetyNet.dto.ChildAlertDto;
+import com.example.safetyNet.dto.ChildAlertDTO;
 import com.example.safetyNet.dto.PersonDTO;
-import com.example.safetyNet.dto.PersonGeneralDto;
+import com.example.safetyNet.dto.PersonGeneralDTO;
 import com.example.safetyNet.dto.UpdatePersonDTO;
 import com.example.safetyNet.exception.NotFoundException;
 import com.example.safetyNet.model.MedicalRecord;
 import com.example.safetyNet.model.Person;
-import com.example.safetyNet.repository.MedicalRecordRepository;
 import com.example.safetyNet.repository.PersonRepository;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -151,7 +148,7 @@ public class PersonServiceTest {
         when(mapperService.getAllInfoOfPerson(Arrays.asList(personToTest))).thenReturn(
                 personDTOList);
 
-        List<ChildAlertDto> result =
+        List<ChildAlertDTO> result =
                 personService.getChildAlert("0 Test Address");
 
         // Then.
@@ -190,8 +187,8 @@ public class PersonServiceTest {
     @Test
     public void testGetPersonInfo() throws IOException {
         // Given.
-        PersonGeneralDto personGeneralDto = new PersonGeneralDto();
-        List<PersonGeneralDto> personGeneralDtos = new ArrayList<>();
+        PersonGeneralDTO personGeneralDto = new PersonGeneralDTO();
+        List<PersonGeneralDTO> personGeneralDtos = new ArrayList<>();
         personGeneralDtos.add(personGeneralDto);
 
 
@@ -201,7 +198,7 @@ public class PersonServiceTest {
         when(mapperService.getPersonsInfo(persons)).thenReturn(personGeneralDtos);
 
 
-        List<PersonGeneralDto> result =
+        List<PersonGeneralDTO> result =
                 personService.getPersonInfo("testPersonFirstName", "testPersonLastName");
 
         // Then.

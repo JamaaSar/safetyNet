@@ -1,13 +1,12 @@
 package com.example.safetyNet.dto;
 
 import com.example.safetyNet.model.CommonInfoPerson;
-import jakarta.validation.constraints.NotEmpty;
 
 
-public class Child extends CommonInfoPerson {
+public class ChildDTO extends CommonInfoPersonDTO {
 
 
-    public Child() {
+    public ChildDTO() {
     }
 
     private int age;

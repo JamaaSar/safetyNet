@@ -1,12 +1,12 @@
 package com.example.safetyNet.controller;
 
-import com.example.safetyNet.dto.ChildAlertDto;
+import com.example.safetyNet.dto.ChildAlertDTO;
 import com.example.safetyNet.dto.FloodDTO;
-import com.example.safetyNet.dto.PersonGeneralDto;
+import com.example.safetyNet.dto.PersonGeneralDTO;
 import com.example.safetyNet.service.FireStationService;
 import com.example.safetyNet.service.PersonService;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,7 +23,7 @@ import java.util.Set;
 @RequestMapping("/")
 public class UrlsController {
 
-    private static final Logger logger = LoggerFactory.getLogger(UrlsController.class);
+    private static final Logger logger = LogManager.getLogger("UrlsController");
 
     @Autowired
     PersonService personService;
@@ -38,7 +38,7 @@ public class UrlsController {
     }
 
     @GetMapping("/personInfo")
-    public ResponseEntity<List<PersonGeneralDto>> getPersonInfo(
+    public ResponseEntity<List<PersonGeneralDTO>> getPersonInfo(
             @RequestParam(name = "firstName") String firstName,
             @RequestParam(name = "lastName") String lastName) throws IOException {
         logger.info("getPersonInfo");
@@ -47,7 +47,7 @@ public class UrlsController {
     }
 
     @GetMapping("/childAlert")
-    public ResponseEntity<List<ChildAlertDto>> getChild(
+    public ResponseEntity<List<ChildAlertDTO>> getChild(
             @RequestParam(name = "address") String address) throws IOException {
         logger.info("getChild");
         return new ResponseEntity<>(personService.getChildAlert(address),
@@ -73,7 +73,7 @@ public class UrlsController {
     }
 
     @GetMapping("/fire")
-    public ResponseEntity<List<PersonGeneralDto>> getFire(
+    public ResponseEntity<List<PersonGeneralDTO>> getFire(
             @RequestParam(name = "address") String address) throws IOException {
         logger.info("getFire");
         return new ResponseEntity<>(fireStationService.getFire(address),

@@ -2,7 +2,7 @@ package com.example.safetyNet.service;
 
 import com.example.safetyNet.dto.PersonDTO;
 import com.example.safetyNet.dto.PersonForFloodDTO;
-import com.example.safetyNet.dto.PersonGeneralDto;
+import com.example.safetyNet.dto.PersonGeneralDTO;
 import com.example.safetyNet.model.MedicalRecord;
 import com.example.safetyNet.model.Person;
 import com.example.safetyNet.outil.CalculateAge;
@@ -41,12 +41,12 @@ public class MapperService {
         return res;
     }
 
-    public List<PersonGeneralDto> getPersonsInfo(List<Person> data) throws IOException {
-        List<PersonGeneralDto> res = new ArrayList<>();
+    public List<PersonGeneralDTO> getPersonsInfo(List<Person> data) throws IOException {
+        List<PersonGeneralDTO> res = new ArrayList<>();
         for (Person p : data) {
             System.out.println(p);
 
-            PersonGeneralDto personInfoDto = new PersonGeneralDto();
+            PersonGeneralDTO personInfoDto = new PersonGeneralDTO();
             MedicalRecord medicalRecord =
                     medicalRecordService.getAllMedicalRecordsByName(p.getFirstName());
             personInfoDto.setFirstName(p.getFirstName());
